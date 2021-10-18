@@ -1,0 +1,15 @@
+#app {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+nav {
+    padding: 20px 0 20px 0;
+}
+
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: rgb(150, 150, 150);
+    border-radius: .3rem;
+  }
