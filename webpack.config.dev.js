@@ -24,7 +24,12 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            "process.env.API_URL": JSON.stringify("http://localhost:3001")
+            "process.env":{
+                "API_URL": JSON.stringify("http://localhost:3001"),
+                "BACK4APP_API_URL": JSON.stringify("http://localhost:3001"),
+                "BACK4APP_APP_ID": JSON.stringify("pen8j01Zc3JaqVkHmMCbZud1AhOaOMeBYTpzlUhw"),
+                "BACK4APP_REST_API_KEY": JSON.stringify("GWAMpyqKg5rhHbE9ueXXFdjD3vF3n980YzHRE8SG")
+            }
         }),
         new HtmlWebpackPlugin({
             template: "src/index.html",
