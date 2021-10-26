@@ -23,8 +23,8 @@ export function loadAccounts() {
         dispatch(beginApiCall)
         return accountApi
         .getAccounts()
-        .then(accounts => {
-            dispatch(loadAccountsSuccess(accounts));
+        .then(response => {
+            dispatch(loadAccountsSuccess(response.results));
         })
         .catch (error => {
             dispatch(apiCallError())
