@@ -54,6 +54,17 @@ server.post("/courses/", function(req, res, next) {
   }
 });
 
+server.put("/users/", function(req, res, next) {
+  const error = validateUser(req.body);
+  if (error) {
+    res.status(400).send(error);
+  } else {
+    req.body.slug = createSlug(req.body.username); // Generate a slug for new courses.
+    next();
+  }
+});
+
+
 // Use default router
 server.use(router);
 

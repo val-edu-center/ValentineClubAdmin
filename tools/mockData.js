@@ -84,6 +84,29 @@ const newCourse = {
   category: ""
 };
 
+const newUser = {
+  id: null,
+  username: "",
+  password: ""
+};
+
+const session = {
+  "objectId": "0JueaRLDwe",
+  "username": "ya",
+  "createdAt": "2021-10-30T22:43:26.382Z",
+  "updatedAt": "2021-10-30T22:43:26.382Z",
+  "ACL": {
+      "*": {
+          "read": true
+      },
+      "0JueaRLDwe": {
+          "read": true,
+          "write": true
+      }
+  },
+  "sessionToken": "r:46008f49e00cf39391ab752133674c6e"
+}
+
 // Using CommonJS style export so we can consume via Node (without using Babel-node)
 module.exports = {
   newCourse,
