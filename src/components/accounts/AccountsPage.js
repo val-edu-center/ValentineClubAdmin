@@ -59,7 +59,7 @@ handleDeleteAccount = account => {
                 <><button style={{ marginBottom: 20 }} className="btn btn-primary add-course" onClick={ () => this.setState({ redirectToAddCoursePage: true})}>
                     Add Account
                 </button>
-                <AccountList onDeleteClick={this.handleDeleteCourse} courses={this.props.courses}></AccountList></>) 
+                <AccountList onDeleteClick={this.handleDeleteCourse} accounts={this.props.accounts}></AccountList></>) 
                 }
             </>
         )

@@ -64,7 +64,6 @@ server.put("/users/", function(req, res, next) {
   }
 });
 
-
 // Use default router
 server.use(router);
 

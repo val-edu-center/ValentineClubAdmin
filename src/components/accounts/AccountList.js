@@ -2,27 +2,46 @@ import React from 'react'
 import PropTypes from "prop-types"
 import { Link } from 'react-router-dom'
 
-const AccountList = ({ courses, onDeleteClick }) => (
+function buildRoles(acl) {
+    const roles = []
+    //TODO replace this logic to use roles
+    if (acl['*'].write) {
+        roles.push('Director')
+    }
+    if (acl['gskFoU7ioY'] != null) {
+        roles.push('3D Club')
+    }
+    if (acl['Nol30IVkdt'] != null) {
+        roles.push('Bank')
+    }
+    return roles.join(',')
+}
+
+const AccountList = ({ accounts, onDeleteClick }) => (
     <table className="table">
         <thead>
             <tr>
                 <th>Account Id</th>
                 <th>Created At</th>
+                <th>Administrator Roles</th>
                 <th />
             </tr>
         </thead>
         <tbody>
-            {courses.map(course => {
+            {accounts.map(account => {
                 return (
-                    <tr key={course.id}>
+                    <tr key={account.objectId}>
                         <td>
-                            <Link to={"/course/" + course.slug}>{course.title}</Link>
+                            <Link to={"/account/" + account.slug}>{account.username}</Link>
                         </td>
-                        <td> {course.authorName} </td>
+                        <td> {account.createdAt} </td>
+                        <td>
+                            <Link to={"/account/roles/" + account.slug}>{buildRoles(account.ACL)}</Link>
+                        </td>
                         <td>
                             <button
                                 className="btn btn-outline-danger"
-                                onClick={() => onDeleteClick(course)}
+                                onClick={() => onDeleteClick(account)}
                             >
                                 Delete
                             </button>
@@ -35,7 +54,7 @@ const AccountList = ({ courses, onDeleteClick }) => (
 )
 
 AccountList.propTypes = {
-    courses: PropTypes.array.isRequired,
+    accounts: PropTypes.array.isRequired,
     onDeleteClick: PropTypes.func.isRequired
 }
 
