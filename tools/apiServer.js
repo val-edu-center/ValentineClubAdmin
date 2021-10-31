@@ -90,3 +90,9 @@ function validateCourse(course) {
   if (!course.category) return "Category is required.";
   return "";
 }
+
+function validateUser(user) {
+  if (!user.username) return "Username is required";
+  if (!user.password) return "Password is required.";
+  return "";
+}

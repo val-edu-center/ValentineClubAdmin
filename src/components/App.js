@@ -10,6 +10,8 @@ import LoginPage from './login/LoginPage'
 import ManageCoursePage from './courses/ManageCoursePage'
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
+import AccountsPage from './accounts/AccountsPage'
+import ManageAccountPage from './accounts/ManageAccountPage'
 
 function App() {
     return (
@@ -22,6 +24,9 @@ function App() {
                 <Route path="/course/:slug" component={ManageCoursePage}></Route>
                 <Route path="/course" component={ManageCoursePage}></Route>
                 <Route path="/login" component={LoginPage}></Route>
+                <Route path="/accounts" component={AccountsPage}></Route>
+                <Route path="/account/:slug" component={ManageAccountPage}></Route>
+                <Route path="/account" component={ManageAccountPage}></Route>
                 <Route component={PageNotFound}></Route>
             </Switch>
             <ToastContainer autoClose={3000} hideProgressBar />

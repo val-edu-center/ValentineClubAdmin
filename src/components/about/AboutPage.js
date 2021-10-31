@@ -2,9 +2,17 @@ import React from "react";
 
 const AboutPage = () => (
     <div>
-        <h2>About</h2>
+        <h2>About Valentine</h2>
+        <a href="https://bgcc.org/louis-l-valentine-club/">Official Web Page</a>
         <p>
-            React, Redux and React Router for ultra-responsive web apps.
+            <strong>School-Year Hours:</strong> 2:30-6 p.m.<br/>
+            <strong>Teen After Hours:</strong> 6-7 p.m.<br/>
+            <strong>Club Director:</strong> Dawn Jimenez
+        </p>
+        <p>
+            3400 S. Emerald<br/>
+            Chicago, IL 60616<br/>
+            773-927-7373
         </p>
     </div>
 );
