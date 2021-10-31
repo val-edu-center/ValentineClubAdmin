@@ -6,6 +6,7 @@ import Header from './common/Header'
 import { Switch } from 'react-router-dom/cjs/react-router-dom.min'
 import PageNotFound from './common/PageNotFound'
 import CoursesPage from './courses/CoursesPage'
+import LoginPage from './login/LoginPage'
 import ManageCoursePage from './courses/ManageCoursePage'
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/courses" component={CoursesPage}></Route>
                 <Route path="/course/:slug" component={ManageCoursePage}></Route>
                 <Route path="/course" component={ManageCoursePage}></Route>
+                <Route path="/login" component={LoginPage}></Route>
                 <Route component={PageNotFound}></Route>
             </Switch>
             <ToastContainer autoClose={3000} hideProgressBar />

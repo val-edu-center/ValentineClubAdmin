@@ -84,13 +84,12 @@ const newCourse = {
   category: ""
 };
 
-const newUser = {
-  id: null,
-  username: "",
-  password: ""
-};
+const newCredentials = {
+  username: '',
+  password: ''
+}
 
-const session = {
+const login = {
   "objectId": "0JueaRLDwe",
   "username": "ya",
   "createdAt": "2021-10-30T22:43:26.382Z",
@@ -109,7 +108,9 @@ const session = {
 
 // Using CommonJS style export so we can consume via Node (without using Babel-node)
 module.exports = {
+  newCredentials,
   newCourse,
+  login,
   courses,
   authors
 };
