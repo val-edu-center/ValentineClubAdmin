@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
+import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-const Header = () => {
+const Header = ( {session} ) => {
+    const loginStyle = { float: 'right'}
     const activeStyle = { color: "#F152BA"}
-
     return (
         <nav>
             <NavLink to="/" activeStyle={activeStyle} exact >Home</NavLink> 
@@ -11,8 +13,22 @@ const Header = () => {
             <NavLink to="/about" activeStyle={activeStyle}>About</NavLink>
             {" | "}
             <NavLink to="/courses" activeStyle={activeStyle}>Courses</NavLink>
+            
+            {!session.sessionToken && <NavLink to="/login" style={loginStyle}>Login</NavLink>}  
         </nav>
     )
+    
 }
 
-export default Header;
+function mapStateToProps(state) {
+    return {
+        session: state.session,
+    }
+}
+
+Header.propTypes = {
+    session: PropTypes.object.isRequired
+}
+
+export default connect(mapStateToProps)(Header
+    );
