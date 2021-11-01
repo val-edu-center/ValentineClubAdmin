@@ -54,6 +54,6 @@ export function saveAccount(account) {
 export function deleteAccount(account) {
     return function (dispatch) {
         dispatch(deleteAccountOptimistic(account))
-        return accountApi.deleteAccount(account.id)
+        return accountApi.deleteAccount(account.objectId)
     }
 }

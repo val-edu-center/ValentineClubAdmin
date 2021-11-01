@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from "prop-types"
-import { Link } from 'react-router-dom'
 
 function buildRoles(acl) {
     const roles = []
@@ -17,14 +16,17 @@ function buildRoles(acl) {
     return roles.join(',')
 }
 
-const AccountList = ({ accounts, onDeleteClick }) => (
+function getTime(time) {
+    return time.split("T")[0]
+}
+
+const AccountList = ({ accounts}) => (
     <table className="table">
         <thead>
             <tr>
                 <th>Account Id</th>
-                <th>Created At</th>
+                <th>Created Date</th>
                 <th>Administrator Roles</th>
-                <th />
             </tr>
         </thead>
         <tbody>
@@ -32,19 +34,11 @@ const AccountList = ({ accounts, onDeleteClick }) => (
                 return (
                     <tr key={account.objectId}>
                         <td>
-                            <Link to={"/account/" + account.slug}>{account.username}</Link>
+                            <p>{account.username}</p>
                         </td>
-                        <td> {account.createdAt} </td>
+                        <td> {getTime(account.createdAt)} </td>
                         <td>
-                            <Link to={"/account/roles/" + account.slug}>{buildRoles(account.ACL)}</Link>
-                        </td>
-                        <td>
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => onDeleteClick(account)}
-                            >
-                                Delete
-                            </button>
+                            <strong>{buildRoles(account.ACL)}</strong>
                         </td>
                     </tr>
                 )
