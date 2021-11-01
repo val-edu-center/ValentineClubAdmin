@@ -26,12 +26,13 @@ export function getAccounts() {
 }
 //TODO handle puts
 export function saveAccount(account) {
-  return fetch(baseUrl + (account.id || ""), {
+  return fetch(baseUrl + (account.objectId || ""), {
     method: account.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
     headers: {
       "content-type": "application/json",
       "X-Parse-Application-Id": appId,
-      "X-Parse-REST-API-Key": restApiKey
+      "X-Parse-REST-API-Key": restApiKey,
+      "X-Parse-Session-Token": sessionToken
     },
     body: JSON.stringify(account)
   })

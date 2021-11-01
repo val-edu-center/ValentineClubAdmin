@@ -33,8 +33,6 @@ handleDeleteAccount = account => {
     render() {
         return (
             <>
-                {/* One way to redirect, using a flag on state */}
-                {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
                 <h2>Accounts</h2>
                 {this.props.loading ? (<Spinner/>) : (
                 <><button style={{ marginBottom: 20 }} className="btn btn-primary add-course" onClick={ () => this.setState({ redirectToAddCoursePage: true})}>
