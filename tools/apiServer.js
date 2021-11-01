@@ -64,7 +64,6 @@ server.put("/users/", function(req, res, next) {
   }
 });
 
-
 // Use default router
 server.use(router);
 
@@ -88,5 +87,11 @@ function validateCourse(course) {
   if (!course.title) return "Title is required.";
   if (!course.authorId) return "Author is required.";
   if (!course.category) return "Category is required.";
+  return "";
+}
+
+function validateUser(user) {
+  if (!user.username) return "Username is required";
+  if (!user.password) return "Password is required.";
   return "";
 }

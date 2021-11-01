@@ -13,6 +13,8 @@ const Header = ( {session} ) => {
             <NavLink to="/about" activeStyle={activeStyle}>About</NavLink>
             {" | "}
             <NavLink to="/courses" activeStyle={activeStyle}>Courses</NavLink>
+            {" | "}
+            <NavLink to="/accounts" activeStyle={activeStyle}>Accounts</NavLink>
             
             {!session.sessionToken && <NavLink to="/login" style={loginStyle}>Login</NavLink>}  
         </nav>
