@@ -26,6 +26,8 @@ export function getAccounts() {
 }
 //TODO handle puts
 export function saveAccount(account) {
+  const state = loadFromLocalStorage()
+  const sessionToken = state.session.sessionToken
   return fetch(baseUrl + (account.objectId || ""), {
     method: account.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
     headers: {
@@ -43,7 +45,6 @@ export function saveAccount(account) {
 export function deleteAccount(accountId) {
   const state = loadFromLocalStorage()
   const sessionToken = state.session.sessionToken
-  console.log(sessionToken)
   return fetch(baseUrl + accountId, {
     method: "DELETE",
     headers: {
