@@ -10,39 +10,43 @@ function getTime(time) {
     return time.split("T")[0]
 }
 
-const AccountList = ({ onDeleteClick, session, accounts}) => (
+function filterDirectors(account) { 
+    const roles = roleMapper.getRoles(account.objectId, account.ACL)
+    return !roles.isDirector 
+}
+
+const AccountList = ({ onDeleteClick, session, accounts }) => (
     <table className="table">
         <thead>
             <tr>
                 <th>Account Id</th>
                 <th>Created Date</th>
                 <th>Administrator Roles</th>
-                {session.roles.isDirector && <th/>}
+                {session.roles.isDirector && <th />}
             </tr>
         </thead>
         <tbody>
-            {accounts.filter(account => {!roleMapper.getRoles(account.objectId, account.ACL).isDirector})
-            .map(account => {
-                return (
-                    <tr key={account.objectId}>
-                        <td>
-                            <p>{account.username}</p>
-                        </td>
-                        <td> {getTime(account.createdAt)} </td>
-                        <td>
-                            <strong>{buildRoles(account.objectId, account.ACL)}</strong>
-                        </td>
-                        {session.roles.isDirector && <td>
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => onDeleteClick(account)}
-                            >
-                                Delete
-                            </button>
-                        </td>}
-                    </tr>
-                )
-            })}
+            {accounts.filter(account => filterDirectors(account)).map(account => {
+                    return (
+                        <tr key={account.objectId}>
+                            <td>
+                                <p>{account.username}</p>
+                            </td>
+                            <td> {getTime(account.createdAt)} </td>
+                            <td>
+                                <strong>{buildRoles(account.objectId, account.ACL)}</strong>
+                            </td>
+                            {session.roles.isDirector && <td>
+                                <button
+                                    className="btn btn-outline-danger"
+                                    onClick={() => onDeleteClick(account)}
+                                >
+                                    Delete
+                                </button>
+                            </td>}
+                        </tr>
+                    )
+                })}
         </tbody>
     </table>
 )
