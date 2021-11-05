@@ -4,7 +4,6 @@ import * as accountActions from "../../redux/actions/accountActions"
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import AccountList from './AccountList'
-import { Redirect } from 'react-router-dom'
 import Spinner from "../common/Spinner";
 import { toast } from "react-toastify";
 
@@ -13,7 +12,6 @@ class AccountsPage extends React.Component {
         redirectToAddCoursePage: false
     }
 
-
     componentDidMount() {
         const { accounts, actions} = this.props
         if (accounts.length == 0) {
@@ -21,6 +19,7 @@ class AccountsPage extends React.Component {
                 alert("Loading accounts failed " + error)
             })
         }
+        //TODO(Add redirect if session is null)
     }
 
 handleDeleteAccount = account => {
@@ -38,7 +37,7 @@ handleDeleteAccount = account => {
                 <><button style={{ marginBottom: 20 }} className="btn btn-primary add-course" onClick={ () => this.setState({ redirectToAddCoursePage: true})}>
                     Add Account
                 </button>
-                <AccountList onDeleteClick={this.handleDeleteAccount} accounts={this.props.accounts}></AccountList></>) 
+                <AccountList session={this.props.session} onDeleteClick={this.handleDeleteAccount} accounts={this.props.accounts}></AccountList></>) 
                 }
             </>
         )
@@ -47,6 +46,7 @@ handleDeleteAccount = account => {
 
 AccountsPage.propTypes = {
     actions: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
     accounts: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired
 }
@@ -55,6 +55,7 @@ AccountsPage.propTypes = {
 function mapStateToProps(state) {
     return { 
         accounts: state.accounts,
+        session: state.session,
         loading: state.apiCallsInProgress > 0
     }
 }
