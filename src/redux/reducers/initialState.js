@@ -2,6 +2,6 @@ export default {
     accounts: [],
     courses: [],
     authors: [],
-    session: {},
+    session: {roles:{}},
     apiCallsInProgress: 0
 }

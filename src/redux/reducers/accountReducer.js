@@ -12,7 +12,7 @@ export default function accountReducer(state = initialState.accounts, action) {
         case LOAD_ACCOUNTS_SUCCESS:
             return action.accounts
         case DELETE_ACCOUNT_OPTIMISTIC:
-            return state.filter (account => account.id !== action.account.id)
+            return state.filter (account => account.objectId !== action.account.objectId)
         default:
             return state
     }
