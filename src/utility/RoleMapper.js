@@ -25,7 +25,6 @@ function isBanker(acl) {
 
 export function getRolesList(objectId, acl) {
     const roles = []
-    //TODO replace this logic to use roles
     if (isDirector(objectId)) {
         roles.push('Director')
     }
@@ -46,7 +45,6 @@ export function getRolesList(objectId, acl) {
 
 export function getRoles(objectId, acl) {
     const roles = new Roles
-    //TODO replace this logic to use roles
     if (isDirector(objectId)) {
         roles.isDirector = true
     }

@@ -10,7 +10,7 @@ function getTime(time) {
     return time.split("T")[0]
 }
 
-function isNotDeletable(account, sessionRoles) { 
+function isNotDeletable(account, sessionRoles) {
     const roles = roleMapper.getRoles(account.objectId, account.ACL)
     return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
 }
@@ -22,20 +22,22 @@ const AccountList = ({ onDeleteClick, session, accounts }) => (
                 <th>Account Id</th>
                 <th>Created Date</th>
                 <th>Administrator Roles</th>
-                <th />
+                {(session.roles.isStaff || session.roles.isDirector) && <th />}
             </tr>
         </thead>
         <tbody>
             {accounts.filter(account => !isNotDeletable(account, session.roles)).map(account => {
-                    return (
-                        <tr key={account.objectId}>
-                            <td>
-                                <p>{account.username}</p>
-                            </td>
-                            <td> {getTime(account.createdAt)} </td>
-                            <td>
-                                <strong>{buildRoles(account.objectId, account.ACL)}</strong>
-                            </td>
+                return (
+                    <tr key={account.objectId}>
+                        <td>
+                            <p>{account.username}</p>
+                        </td>
+                        <td> {getTime(account.createdAt)} </td>
+                        <td>
+                            <strong>{buildRoles(account.objectId, account.ACL)}</strong>
+                        </td>
+
+                        {(session.roles.isStaff || session.roles.isDirector) &&
                             <td>
                                 <button
                                     className="btn btn-outline-danger"
@@ -44,9 +46,10 @@ const AccountList = ({ onDeleteClick, session, accounts }) => (
                                     Delete
                                 </button>
                             </td>
-                        </tr>
-                    )
-                })}
+                        }
+                    </tr>
+                )
+            })}
         </tbody>
     </table>
 )

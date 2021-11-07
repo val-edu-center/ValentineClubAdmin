@@ -11,6 +11,7 @@ import ManageCoursePage from './courses/ManageCoursePage'
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import AccountsPage from './accounts/AccountsPage'
+import UnauthorizedPage from './common/UnauthorizedPage'
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/course" component={ManageCoursePage}></Route>
                 <Route path="/login" component={LoginPage}></Route>
                 <Route path="/accounts" component={AccountsPage}></Route>
+                <Route path="/unauthorized" component={UnauthorizedPage}></Route>
                 <Route component={PageNotFound}></Route>
             </Switch>
             <ToastContainer autoClose={3000} hideProgressBar />

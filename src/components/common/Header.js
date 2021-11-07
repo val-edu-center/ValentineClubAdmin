@@ -8,8 +8,8 @@ const Header = ( {session} ) => {
     const activeStyle = { color: "#F152BA"}
     // const isBanker = session.roles.isBanker
     // const is3DClub = session.roles.is3DClubPrinter || session.roles.is3DClubDesigner
-    const isDirector = session.roles.isDirector
-    const isStaff = session.roles.isStaff
+    // const isDirector = session.roles.isDirector
+    // const isStaff = session.roles.isStaff
     return (
         <nav>
             <NavLink to="/" activeStyle={activeStyle} exact >Home</NavLink> 
@@ -17,8 +17,8 @@ const Header = ( {session} ) => {
             <NavLink to="/about" activeStyle={activeStyle}>About</NavLink>
             {" | "}
             <NavLink to="/courses" activeStyle={activeStyle}>Courses</NavLink>
-            {(isStaff || isDirector) && " | "}
-            {(isStaff || isDirector) && <NavLink to="/accounts" activeStyle={activeStyle}>Accounts</NavLink>}
+            {session.sessionToken && " | "}
+            {session.sessionToken && <NavLink to="/accounts" activeStyle={activeStyle}>Accounts</NavLink>}
             {/* {isBanker && " | "} 
             {isBanker && <NavLink to="/bank">Bank</NavLink>} 
             {isDirector && " | "} 

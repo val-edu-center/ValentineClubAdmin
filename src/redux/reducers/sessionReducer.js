@@ -11,12 +11,6 @@ function mapSession(session) {
     return newSession
 }
 
-function mapSession(session) {
-    const isBanker = session.ACL && session.ACL.Nol30IVkdt
-    const isLoggedIn = !session.sessionToken
-    return {sessionToken: session.sessionToken, isLoggedIn, isBanker}
-}
-
 export default function sessionReducer(state = initialState.session, action) {
     switch(action.type) {
         case LOAD_SESSION_SUCCESS:
