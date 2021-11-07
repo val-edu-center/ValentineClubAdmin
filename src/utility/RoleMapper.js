@@ -7,8 +7,16 @@ function isDirector(objectId) {
     return objectId === programDiectorUsername || objectId === clubDiectorUsername
 }
 
-function is3DClubEmployee(acl) {
-    return acl['role:3D Club Designer'] || acl['role:3D Club Printer']
+function isStaff(acl) {
+    return acl['role:Director'] && !acl['role:Staff']
+}
+
+function is3DClubDesigner(acl) {
+    return acl['role:3D Club Designer']
+}
+
+function is3DClubPrinter(acl) {
+    return acl['role:3D Club Printer']
 }
 
 function isBanker(acl) {
@@ -21,11 +29,17 @@ export function getRolesList(objectId, acl) {
     if (isDirector(objectId)) {
         roles.push('Director')
     }
-    if (is3DClubEmployee(acl)) {
-        roles.push('3D Club')
+    if (is3DClubDesigner(acl)) {
+        roles.push('3D Designer')
     }
     if (isBanker(acl)) {
         roles.push('Banker')
+    }
+    if (isStaff(acl)) {
+        roles.push('Staff')
+    }
+    if (is3DClubPrinter(acl)) {
+        roles.push('3D Printer')
     }
     return roles
 }
@@ -36,11 +50,17 @@ export function getRoles(objectId, acl) {
     if (isDirector(objectId)) {
         roles.isDirector = true
     }
-    if (is3DClubEmployee(acl)) {
-        roles.is3DClub = true
+    if (is3DClubDesigner(acl)) {
+        roles.is3DClubDesigner = true
+    }
+    if (is3DClubPrinter(acl)) {
+        roles.is3DClubPrinter = true
     }
     if (isBanker(acl)) {
         roles.isBanker = true
+    }
+    if (isStaff(acl)) {
+        roles.isStaff = true
     }
     return roles
 }

@@ -10,9 +10,9 @@ function getTime(time) {
     return time.split("T")[0]
 }
 
-function filterDirectors(account) { 
+function isNotDeletable(account, sessionRoles) { 
     const roles = roleMapper.getRoles(account.objectId, account.ACL)
-    return !roles.isDirector 
+    return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
 }
 
 const AccountList = ({ onDeleteClick, session, accounts }) => (
@@ -22,11 +22,11 @@ const AccountList = ({ onDeleteClick, session, accounts }) => (
                 <th>Account Id</th>
                 <th>Created Date</th>
                 <th>Administrator Roles</th>
-                {session.roles.isDirector && <th />}
+                <th />
             </tr>
         </thead>
         <tbody>
-            {accounts.filter(account => filterDirectors(account)).map(account => {
+            {accounts.filter(account => !isNotDeletable(account, session.roles)).map(account => {
                     return (
                         <tr key={account.objectId}>
                             <td>
@@ -36,14 +36,14 @@ const AccountList = ({ onDeleteClick, session, accounts }) => (
                             <td>
                                 <strong>{buildRoles(account.objectId, account.ACL)}</strong>
                             </td>
-                            {session.roles.isDirector && <td>
+                            <td>
                                 <button
                                     className="btn btn-outline-danger"
                                     onClick={() => onDeleteClick(account)}
                                 >
                                     Delete
                                 </button>
-                            </td>}
+                            </td>
                         </tr>
                     )
                 })}
