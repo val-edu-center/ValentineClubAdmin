@@ -1,4 +1,4 @@
-import { LOAD_SESSION_SUCCESS } from "./actionTypes";
+import { LOAD_SESSION_SUCCESS, REMOVE_SESSION } from "./actionTypes";
 import * as sessionApi from '../../api/sessionApi'
 import { beginApiCall, apiCallError } from "./apiStatusActions";
 
@@ -18,5 +18,11 @@ export function loadSession({username, password}) {
             dispatch(apiCallError())
             throw error
         })
+    }
+}
+
+export function removeSession() {
+    return function (dispatch) {
+        return dispatch({type: REMOVE_SESSION})
     }
 }

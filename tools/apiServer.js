@@ -44,22 +44,12 @@ server.use((req, res, next) => {
   next();
 });
 
-server.post("/courses/", function(req, res, next) {
-  const error = validateCourse(req.body);
-  if (error) {
-    res.status(400).send(error);
-  } else {
-    req.body.slug = createSlug(req.body.title); // Generate a slug for new courses.
-    next();
-  }
-});
-
 server.put("/users/", function(req, res, next) {
   const error = validateUser(req.body);
   if (error) {
     res.status(400).send(error);
   } else {
-    req.body.slug = createSlug(req.body.username); // Generate a slug for new courses.
+    req.body.slug = createSlug(req.body.username); 
     next();
   }
 });
@@ -81,13 +71,6 @@ function createSlug(value) {
     .replace(/[^a-z0-9_]+/gi, "-")
     .replace(/^-|-$/g, "")
     .toLowerCase();
-}
-
-function validateCourse(course) {
-  if (!course.title) return "Title is required.";
-  if (!course.authorId) return "Author is required.";
-  if (!course.category) return "Category is required.";
-  return "";
 }
 
 function validateUser(user) {

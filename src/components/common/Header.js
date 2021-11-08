@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 const Header = ( {session} ) => {
-    const loginStyle = { float: 'right'}
+    const rightJustifiedStyle = { float: 'right'}
     const activeStyle = { color: "#F152BA"}
     // const isBanker = session.roles.isBanker
     // const is3DClub = session.roles.is3DClubPrinter || session.roles.is3DClubDesigner
@@ -15,8 +15,6 @@ const Header = ( {session} ) => {
             <NavLink to="/" activeStyle={activeStyle} exact >Home</NavLink> 
             {" | "}
             <NavLink to="/about" activeStyle={activeStyle}>About</NavLink>
-            {" | "}
-            <NavLink to="/courses" activeStyle={activeStyle}>Courses</NavLink>
             {session.sessionToken && " | "}
             {session.sessionToken && <NavLink to="/accounts" activeStyle={activeStyle}>Accounts</NavLink>}
             {/* {isBanker && " | "} 
@@ -25,7 +23,8 @@ const Header = ( {session} ) => {
             {isDirector && <NavLink to="/bank">Members</NavLink>} 
             {is3DClub && " | "} 
             {is3DClub && <NavLink to="/bank">3D Prints</NavLink>}  */}
-            {!session.sessionToken && <NavLink to="/login" style={loginStyle}>Login</NavLink>}  
+            {!session.sessionToken && <NavLink to="/login" style={rightJustifiedStyle}>Login</NavLink>} 
+            {session.sessionToken && <NavLink to="/logout" style={rightJustifiedStyle}>Logout</NavLink>}  
         </nav>
     )
     
