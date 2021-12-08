@@ -150,7 +150,7 @@ const newCredentials = {
 }
 
 const login = {
-  "objectId": "0JueaRLDwe",
+  "objectId": "7vR9hH9JG9",
   "username": "ya",
   "createdAt": "2021-10-30T22:43:26.382Z",
   "updatedAt": "2021-10-30T22:43:26.382Z",
@@ -158,18 +158,6 @@ const login = {
     "*": {
       "read": true,
       "write": true
-    },
-    "0JueaRLDwe": {
-      "read": true,
-      "write": true
-    },
-    "Nol30IVkdt": {
-      "read":true,
-      "write": true
-    },
-    "gskFoU7ioY": { 
-      "read": true, 
-      "write": true 
     }
   },
   "sessionToken": "r:46008f49e00cf39391ab752133674c6e"

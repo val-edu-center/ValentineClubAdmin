@@ -15,7 +15,9 @@ function isNotDeletable(account, sessionRoles) {
     return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
 }
 
-const AccountList = ({ onDeleteClick, session, accounts }) => (
+const AccountList = ({ onDeleteClick, session, accounts }) => {
+    console.log(session)
+    return (
     <table className="table">
         <thead>
             <tr>
@@ -52,7 +54,7 @@ const AccountList = ({ onDeleteClick, session, accounts }) => (
             })}
         </tbody>
     </table>
-)
+)}
 
 AccountList.propTypes = {
     accounts: PropTypes.array.isRequired,
