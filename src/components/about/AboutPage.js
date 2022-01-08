@@ -7,7 +7,8 @@ const AboutPage = () => (
         <p>
             <strong>School-Year Hours:</strong> 2:30-6 p.m.<br/>
             <strong>Teen After Hours:</strong> 6-7 p.m.<br/>
-            <strong>Club Director:</strong> Dawn Jimenez
+            <strong>Club Director:</strong> Dawn Jimenez<br/>
+            <strong>Program Director:</strong> Raul Jimenez
         </p>
         <p>
             3400 S. Emerald<br/>
