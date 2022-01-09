@@ -1,3 +1,6 @@
+
+const currentUserRole = 'Director'
+
 const users = {
   "results": [
     {
@@ -21,7 +24,7 @@ const users = {
         "username": "ya",
         "createdAt": "2021-04-08T23:45:45.777Z",
         "updatedAt": "2021-11-07T14:02:01.889Z",
-        "roles": ["Member"],
+        "roles": [currentUserRole],
         "ACL": {
             "*": {
                 "read": true
@@ -141,7 +144,7 @@ const login = {
   "username": "ya",
   "createdAt": "2021-10-30T22:43:26.382Z",
   "updatedAt": "2021-10-30T22:43:26.382Z",
-  "roles":["Member"],
+  "roles":[currentUserRole],
   "ACL": {
     "*": {
       "read": true,
@@ -150,6 +153,7 @@ const login = {
   },
   "sessionToken": "r:46008f49e00cf39391ab752133674c6e"
 }
+
 
 const newUser = {
   id: null,

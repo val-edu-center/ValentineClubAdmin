@@ -29,6 +29,7 @@ class AccountsPage extends React.Component {
         return (
             <>
                 {!this.props.session.sessionToken && <Redirect to="/unauthorized" />}
+                {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
                 <h2>Accounts</h2>
                 {this.props.loading ? (<Spinner />) : (
                     <AccountList session={this.props.session} onDeleteClick={this.handleDeleteAccount} users={this.props.users}></AccountList>)

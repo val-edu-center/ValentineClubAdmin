@@ -2,61 +2,66 @@ import React from 'react'
 import PropTypes from "prop-types"
 import * as roleMapper from "../../utility/RoleMapper"
 
-function buildRoles(roles) {
-    return roles.join(', ')
-}
 
 function getTime(time) {
     return time.split("T")[0]
 }
 
 function isNotDeletable(user, sessionRoles) {
-    const roles = roleMapper.getRoles(user.roles)
-    console.log(user)
-    console.log(roles)
+    const roles = roleMapper.getAllRoles(user.roles)
     return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
 }
 
 const AccountList = ({ onDeleteClick, session, users }) => {
-    console.log(session)
     return (
-    <table className="table">
-        <thead>
-            <tr>
-                <th>Account Id</th>
-                <th>Created Date</th>
-                <th>Administrator Roles</th>
-                {(session.roles.isStaff || session.roles.isDirector) && <th />}
-            </tr>
-        </thead>
-        <tbody>
-            {users.filter(user => !isNotDeletable(user, session.roles)).map(user => {
-                return (
-                    <tr key={user.objectId}>
-                        <td>
-                            <p>{user.username}</p>
-                        </td>
-                        <td> {getTime(user.createdAt)} </td>
-                        <td>
-                            <strong>{buildRoles(user.roles)}</strong>
-                        </td>
-
-                        {(session.roles.isStaff || session.roles.isDirector) &&
+        <table className="table">
+            <thead>
+                <tr>
+                    <th>Account Id</th>
+                    <th>Created Date</th>
+                    <th>Group</th>
+                    {(session.roles.isStaff || session.roles.isDirector) && <th />}
+                </tr>
+            </thead>
+            <tbody>
+                {users.filter(user => !isNotDeletable(user, session.roles)).map(user => {
+                    return (
+                        <tr key={user.objectId}>
                             <td>
-                                <button
-                                    className="btn btn-outline-danger"
-                                    onClick={() => onDeleteClick(user)}
-                                >
-                                    Delete
-                                </button>
+                                <p>{user.username}</p>
                             </td>
-                        }
-                    </tr>
-                )
-            })}
-        </tbody>
-    </table>
-)}
+                            <td> {getTime(user.createdAt)} </td>
+                            <td>
+                                <select name="groups" id="group-select" value={getRoleOptionValue(user.roles)} readOnly >
+                                    {
+                                        roleMapper.roleGroups.map(r => getRoleOption(r))
+                                    }
+                                </select>
+                            </td>
+
+                            {(session.roles.isStaff || session.roles.isDirector) &&
+                                <td>
+                                    <button
+                                        className="btn btn-outline-danger"
+                                        onClick={() => onDeleteClick(user)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            }
+                        </tr>
+                    )
+                })}
+            </tbody>
+        </table>
+    )
+}
+const getRoleOptionValue = roles => {
+    return roleMapper.getGroupRole(roles)
+}
+const getRoleOption = role => {
+    return <option key={role} value={role}>{role}</option>
+}
 
 AccountList.propTypes = {
     users: PropTypes.array.isRequired,
