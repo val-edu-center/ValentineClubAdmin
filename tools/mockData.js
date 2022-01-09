@@ -17,6 +17,22 @@ const users = {
         }
     },
     {
+        "objectId": "1231512re",
+        "username": "ya",
+        "createdAt": "2021-04-08T23:45:45.777Z",
+        "updatedAt": "2021-11-07T14:02:01.889Z",
+        "roles": ["Member"],
+        "ACL": {
+            "*": {
+                "read": true
+            },
+            "1231512re": {
+                "read": true,
+                "write": true
+            }
+        }
+    },
+    {
         "objectId": "VXgWG7dGjW",
         "username": "jcanty",
         "createdAt": "2021-10-26T03:45:11.089Z",
@@ -125,6 +141,7 @@ const login = {
   "username": "ya",
   "createdAt": "2021-10-30T22:43:26.382Z",
   "updatedAt": "2021-10-30T22:43:26.382Z",
+  "roles":["Member"],
   "ACL": {
     "*": {
       "read": true,
