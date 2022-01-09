@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from 'react-redux'
-import * as accountActions from "../../redux/actions/accountActions"
+import * as userActions from "../../redux/actions/userActions"
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import AccountList from './AccountList'
@@ -12,15 +12,15 @@ class AccountsPage extends React.Component {
     componentDidMount() {
         const { accounts, actions } = this.props
         if (accounts.length == 0 && this.props.session.sessionToken) {
-            actions.accounts.loadAccounts().catch(error => {
-                alert("Loading accounts failed " + error)
+            actions.users.loadUsers().catch(error => {
+                alert("Loading users failed " + error)
             })
         }
     }
 
     handleDeleteAccount = account => {
         toast.success("Account deleted")
-        this.props.actions.accounts.deleteAccount(account).catch(
+        this.props.actions.users.deleteUser(account).catch(
             error => toast.error('Delete failed. ' + error.message, { autoClose: false })
         )
     }
@@ -57,7 +57,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            accounts: bindActionCreators(accountActions, dispatch)
+            users: bindActionCreators(userActions, dispatch)
         }
     }
 }

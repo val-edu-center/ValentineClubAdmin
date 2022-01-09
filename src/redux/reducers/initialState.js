@@ -1,5 +1,5 @@
 export default {
-    accounts: [],
+    users: [],
     session: {roles:{}},
     apiCallsInProgress: 0
 }

@@ -5,6 +5,7 @@ const users = {
         "username": "djimenez",
         "createdAt": "2021-04-08T23:45:45.777Z",
         "updatedAt": "2021-11-07T14:02:01.889Z",
+        "roles": ["Director"],
         "ACL": {
             "*": {
                 "read": true
@@ -20,19 +21,12 @@ const users = {
         "username": "jcanty",
         "createdAt": "2021-10-26T03:45:11.089Z",
         "updatedAt": "2021-11-07T14:03:35.327Z",
+        "roles": ["Staff"],
         "ACL": {
             "*": {
                 "read": true
             },
             "VXgWG7dGjW": {
-                "read": true,
-                "write": true
-            },
-            "role:Staff": {
-                "read": true,
-                "write": true
-            },
-            "role:Director": {
                 "read": true,
                 "write": true
             }
@@ -43,6 +37,7 @@ const users = {
         "username": "Yeet",
         "createdAt": "2021-11-01T00:20:26.329Z",
         "updatedAt": "2021-11-07T14:01:18.842Z",
+        "roles": ["Cadet"],
         "ACL": {
             "7vR9hH9JG9": {
                 "read": true,
@@ -58,15 +53,12 @@ const users = {
         "username": "Temaris",
         "createdAt": "2021-11-03T19:16:55.545Z",
         "updatedAt": "2021-11-07T01:30:05.081Z",
+        "roles": ["Staff"],
         "ACL": {
             "*": {
                 "read": true
             },
             "n29DH7w6Vw": {
-                "read": true,
-                "write": true
-            },
-            "role:Director": {
                 "read": true,
                 "write": true
             }
@@ -77,19 +69,12 @@ const users = {
         "username": "test2",
         "createdAt": "2021-11-06T17:00:31.632Z",
         "updatedAt": "2021-11-06T17:11:52.321Z",
+        "roles": ["Teen"],
         "ACL": {
             "*": {
                 "read": true
             },
             "SwONbdgcpV": {
-                "read": true,
-                "write": true
-            },
-            "role:Director": {
-                "read": true,
-                "write": true
-            },
-            "role:Staff": {
                 "read": true,
                 "write": true
             }
@@ -100,19 +85,12 @@ const users = {
         "username": "test3",
         "createdAt": "2021-11-06T17:06:58.084Z",
         "updatedAt": "2021-11-06T17:11:37.603Z",
+        "roles": ["Junior"],
         "ACL": {
             "*": {
                 "read": true
             },
             "DhitI8jDbZ": {
-                "read": true,
-                "write": true
-            },
-            "role:Staff": {
-                "read": true,
-                "write": true
-            },
-            "role:Director": {
                 "read": true,
                 "write": true
             }
@@ -123,19 +101,12 @@ const users = {
         "username": "test7",
         "createdAt": "2021-11-06T17:08:13.906Z",
         "updatedAt": "2021-11-06T17:10:08.270Z",
+        "roles": ["Intermediate"],
         "ACL": {
             "*": {
                 "read": true
             },
             "BSXBqo8J7I": {
-                "read": true,
-                "write": true
-            },
-            "role:Staff": {
-                "read": true,
-                "write": true
-            },
-            "role:Director": {
                 "read": true,
                 "write": true
             }
