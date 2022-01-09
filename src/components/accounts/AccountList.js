@@ -20,6 +20,7 @@ const AccountList = ({ onDeleteClick, session, users }) => {
                     <th>Account Id</th>
                     <th>Created Date</th>
                     <th>Group</th>
+                    {(session.roles.isBanker) && <th>Bank Account</th>}
                     {(session.roles.isStaff || session.roles.isDirector) && <th />}
                 </tr>
             </thead>
@@ -38,7 +39,11 @@ const AccountList = ({ onDeleteClick, session, users }) => {
                                     }
                                 </select>
                             </td>
-
+                            {(session.roles.isBanker) &&
+                                <td>
+                                    <p>Checkbox</p>
+                                </td>
+                            }
                             {(session.roles.isStaff || session.roles.isDirector) &&
                                 <td>
                                     <button

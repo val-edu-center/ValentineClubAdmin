@@ -8,6 +8,9 @@ const INTERMEDIATE_ROLE = 'Intermediate'
 const TEEN_ROLE = 'Teen'
 const STAFF_ROLE = 'Staff'
 const DIRECTOR_ROLE = 'Director'
+const BANKER_ROLE = 'Banker'
+const DESIGNER_ROLE = '3D Designer'
+const PRINTER_ROLE = '3D Printer'
 export const roleGroups = [CADET_ROLE, PREP_ROLE, JUNIOR_ROLE, INTERMEDIATE_ROLE, TEEN_ROLE, STAFF_ROLE, DIRECTOR_ROLE]
 
 export function getAllRoles(roleArray) {
@@ -89,13 +92,13 @@ function isCadet(roleArray) {
 }
 
 function is3DClubDesigner(roleArray) {
-    return roleArray.includes("3DDesigner")
+    return roleArray.includes(DESIGNER_ROLE)
 }
 
 function is3DClubPrinter(roleArray) {
-    return roleArray.includes("3DPrinter")
+    return roleArray.includes(PRINTER_ROLE)
 }
 
 function isBanker(roleArray) {
-    return roleArray.includes("Banker")
+    return roleArray.includes(BANKER_ROLE) || isStaff(roleArray) || isDirector(roleArray)
 }
