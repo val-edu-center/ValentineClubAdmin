@@ -36,7 +36,7 @@ module.exports = {
                 "BACK4APP_REST_API_KEY": JSON.stringify("GWAMpyqKg5rhHbE9ueXXFdjD3vF3n980YzHRE8SG"),
                 "CLUB_DIRECTOR_USERNAME": JSON.stringify("ScPJhZhiYy"),
                 "PROGRAM_DIRECTOR_USERNAME": JSON.stringify("7vR9hH9JG9")
-            },
+            }
         }),
         new HtmlWebpackPlugin({
             template: "src/index.html",

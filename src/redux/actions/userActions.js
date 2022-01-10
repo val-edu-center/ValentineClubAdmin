@@ -33,13 +33,13 @@ export function loadUsers() {
     }
 }
 
-export function saveUser(account) {
+export function saveUser(user) {
     return function (dispatch) {
         dispatch(beginApiCall())
         return userApi
-        .saveUser(account)
+        .saveUser(user)
         .then(savedAccount => {
-            if (account.id) {
+            if (user.id) {
                 dispatch(updateUserSuccess(savedAccount))
             } else {
                 dispatch(createUserSuccess(savedAccount))
@@ -51,9 +51,9 @@ export function saveUser(account) {
     }
 }
 
-export function deleteUser(account) {
+export function deleteUser(user) {
     return function (dispatch) {
-        dispatch(deleteUserOptimistic(account))
-        return userApi.deleteUser(account.objectId)
+        dispatch(deleteUserOptimistic(user))
+        return userApi.deleteUser(user.objectId)
     }
 }
