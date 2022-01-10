@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux'
 import session from './sessionReducer'
-import accounts from './accountReducer'
+import users from './userReducer'
 import apiCallsInProgress from './apiStatusReducer'
 
 const rootReducer = combineReducers({
-    session, accounts, apiCallsInProgress
+    session, users, apiCallsInProgress
 })
 
 export default rootReducer;

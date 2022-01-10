@@ -1,64 +1,104 @@
 import Roles from "../model/Roles"
 
-const programDiectorUsername = process.env.PROGRAM_DIRECTOR_USERNAME
-const clubDiectorUsername = process.env.CLUB_DIRECTOR_USERNAME
+const GUEST_ROLE = 'Guest'
+const CADET_ROLE = 'Cadet'
+const PREP_ROLE = 'Prep'
+const JUNIOR_ROLE = 'Junior'
+const INTERMEDIATE_ROLE = 'Intermediate'
+const TEEN_ROLE = 'Teen'
+const STAFF_ROLE = 'Staff'
+const DIRECTOR_ROLE = 'Director'
+const BANKER_ROLE = 'Banker'
+const DESIGNER_ROLE = '3D Designer'
+const PRINTER_ROLE = '3D Printer'
+export const roleGroups = [CADET_ROLE, PREP_ROLE, JUNIOR_ROLE, INTERMEDIATE_ROLE, TEEN_ROLE, STAFF_ROLE, DIRECTOR_ROLE]
 
-function isDirector(objectId) {
-    return objectId === programDiectorUsername || objectId === clubDiectorUsername
-}
-
-function isStaff(acl) {
-    return acl['role:Director'] && !acl['role:Staff']
-}
-
-function is3DClubDesigner(acl) {
-    return acl['role:3D Club Designer']
-}
-
-function is3DClubPrinter(acl) {
-    return acl['role:3D Club Printer']
-}
-
-function isBanker(acl) {
-    return acl['role:Banker']
-}
-
-export function getRolesList(objectId, acl) {
-    const roles = []
-    if (isDirector(objectId)) {
-        roles.push('Director')
-    }
-    if (is3DClubDesigner(acl)) {
-        roles.push('3D Designer')
-    }
-    if (isBanker(acl)) {
-        roles.push('Banker')
-    }
-    if (isStaff(acl)) {
-        roles.push('Staff')
-    }
-    if (is3DClubPrinter(acl)) {
-        roles.push('3D Printer')
-    }
-    return roles
-}
-
-export function getRoles(objectId, acl) {
+export function getAllRoles(roleArray) {
     const roles = new Roles
-    if (isDirector(objectId)) {
+    if (isDirector(roleArray)) {
         roles.isDirector = true
     }
-    if (is3DClubDesigner(acl)) {
+    if (is3DClubDesigner(roleArray)) {
         roles.is3DClubDesigner = true
     }
-    if (is3DClubPrinter(acl)) {
+    if (is3DClubPrinter(roleArray)) {
         roles.is3DClubPrinter = true
     }
-    if (isBanker(acl)) {
+    if (isBanker(roleArray)) {
         roles.isBanker = true
     }
-    if (isStaff(acl)) {
+    if (isStaff(roleArray)) {
         roles.isStaff = true
     }
+    if (isTeen(roleArray)) {
+        roles.isTeen = true
+    }
     return roles
+}
+
+export function getGroupRole(roleArray) {
+    if (isDirector(roleArray)) {
+        return DIRECTOR_ROLE
+    }
+    else if (isStaff(roleArray)) {
+        return STAFF_ROLE
+    }
+    else if (isTeen(roleArray)) {
+        return TEEN_ROLE
+    }
+    else if (isIntermediate(roleArray)) {
+        return INTERMEDIATE_ROLE
+    }
+    else if (isJunior(roleArray)) {
+        return JUNIOR_ROLE
+    }
+    else if (isPrep(roleArray)) {
+        return PREP_ROLE
+    }
+    else if (isCadet(roleArray)) {
+        return CADET_ROLE
+    }
+    else {
+        return GUEST_ROLE
+    }
+}
+
+function isDirector(roleArray) {
+    return roleArray.includes(DIRECTOR_ROLE)
+}
+
+function isStaff(roleArray) {
+    return roleArray.includes(STAFF_ROLE)
+}
+
+function isTeen(roleArray) {
+    return roleArray.includes(TEEN_ROLE)
+}
+
+function isIntermediate(roleArray) {
+    return roleArray.includes(INTERMEDIATE_ROLE)
+}
+
+function isJunior(roleArray) {
+    return roleArray.includes(JUNIOR_ROLE)
+}
+
+function isPrep(roleArray) {
+    return roleArray.includes(PREP_ROLE)
+}
+
+function isCadet(roleArray) {
+    return roleArray.includes(CADET_ROLE)
+}
+
+function is3DClubDesigner(roleArray) {
+    return roleArray.includes(DESIGNER_ROLE)
+}
+
+function is3DClubPrinter(roleArray) {
+    return roleArray.includes(PRINTER_ROLE)
+}
+
+function isBanker(roleArray) {
+    return roleArray.includes(BANKER_ROLE) || isStaff(roleArray) || isDirector(roleArray)
 }

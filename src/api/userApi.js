@@ -13,7 +13,7 @@ const loadFromLocalStorage = () => {
   }
 };
 
-export function getAccounts() {
+export function getUsers() {
   return fetch(baseUrl, {
     headers: {
       "content-type": "application/json",
@@ -25,27 +25,27 @@ export function getAccounts() {
     .catch(handleError);
 }
 //TODO handle puts
-export function saveAccount(account) {
+export function saveUser(user) {
   const state = loadFromLocalStorage()
   const sessionToken = state.session.sessionToken
-  return fetch(baseUrl + (account.objectId || ""), {
-    method: account.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
+  return fetch(baseUrl + (user.objectId || ""), {
+    method: user.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
     headers: {
       "content-type": "application/json",
       "X-Parse-Application-Id": appId,
       "X-Parse-REST-API-Key": restApiKey,
       "X-Parse-Session-Token": sessionToken
     },
-    body: JSON.stringify(account)
+    body: JSON.stringify(user)
   })
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function deleteAccount(accountId) {
+export function deleteUser(userId) {
   const state = loadFromLocalStorage()
   const sessionToken = state.session.sessionToken
-  return fetch(baseUrl + accountId, {
+  return fetch(baseUrl + userId, {
     method: "DELETE",
     headers: {
       "content-type": "application/json",

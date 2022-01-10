@@ -8,7 +8,9 @@
     "start:api": "node tools/apiServer.js"
   },
   "dependencies": {
+    "assert": "^2.0.0",
     "bootstrap": "5.0.2",
+    "buffer": "^6.0.3",
     "immer": "9.0.5",
     "prop-types": "15.7.2",
     "react": "17.0.2",
