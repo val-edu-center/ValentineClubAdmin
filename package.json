@@ -2,8 +2,9 @@
   "name": "ps-redux",
   "description": "Valentine Club App",
   "scripts": {
-    "start": "run-p start:dev start:api",
+    "start": "run-p start:preprod start:api",
     "start:dev": "webpack serve --config webpack.config.dev.js --port 3000",
+    "start:preprod": "webpack serve --config webpack.config.preprod.js --port 3000",
     "prestart:api": "node tools/createMockDb.js",
     "start:api": "node tools/apiServer.js"
   },
