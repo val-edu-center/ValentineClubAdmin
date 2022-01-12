@@ -40,8 +40,7 @@ const AccountList = ({ onDeleteClick, session, users }) => {
                                     }
                                 </select>
                             </td>
-                            <td>{getIsApproved(user.isApproved)}
-                            </td>
+                            <td>{getIsApproved(user.isApproved)}</td>
                             {(session.roles.isBanker) &&
                                 <td>
                                     <p>Checkbox</p>
