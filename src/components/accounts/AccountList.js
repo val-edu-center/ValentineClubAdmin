@@ -20,6 +20,7 @@ const AccountList = ({ onDeleteClick, session, users }) => {
                     <th>Account Id</th>
                     <th>Created Date</th>
                     <th>Group</th>
+                    <th>Is Approved</th>
                     {(session.roles.isBanker) && <th>Bank Account</th>}
                     {(session.roles.isStaff || session.roles.isDirector) && <th />}
                 </tr>
@@ -39,6 +40,7 @@ const AccountList = ({ onDeleteClick, session, users }) => {
                                     }
                                 </select>
                             </td>
+                            <td>{getIsApproved(user.isApproved)}</td>
                             {(session.roles.isBanker) &&
                                 <td>
                                     <p>Checkbox</p>
@@ -67,7 +69,13 @@ const getRoleOptionValue = roles => {
 const getRoleOption = role => {
     return <option key={role} value={role}>{role}</option>
 }
-
+const getIsApproved = isApproved => {
+    if (isApproved) {
+        return <p>Yes</p>
+    } else {
+        return <p>No</p>
+    }
+}
 AccountList.propTypes = {
     users: PropTypes.array.isRequired,
     session: PropTypes.object.isRequired,
