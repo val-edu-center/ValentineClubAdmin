@@ -18,11 +18,31 @@ class AccountsPage extends React.Component {
         }
     }
 
-    handleDeleteAccount = user => {
-        toast.success("Account deleted")
+    handleUpdateUser = user => {
+        toast.success("User updated")
+        this.props.actions.users.saveUser(user).catch(
+            error => toast.error('Update failed. ' + error.message, { autoClose: false })
+        )
+    }
+
+    handleDeleteUser = user => {
+        toast.success("User deleted")
         this.props.actions.users.deleteUser(user).catch(
             error => toast.error('Delete failed. ' + error.message, { autoClose: false })
         )
+    }
+
+    flipIsApproved = user => {
+        return {
+            ...user,
+            isApproved: !user.isApproved
+        }
+    }
+
+    handleCheckboxChange = event => { 
+        const objectId = event.target.id
+        const newUser = this.flipIsApproved(this.props.users.find(user => user.objectId === objectId))
+        this.props.actions.users.updateUser(newUser)
     }
 
     render() {
@@ -32,7 +52,7 @@ class AccountsPage extends React.Component {
                 {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
                 <h2>Accounts</h2>
                 {this.props.loading ? (<Spinner />) : (
-                    <AccountList session={this.props.session} onDeleteClick={this.handleDeleteAccount} users={this.props.users}></AccountList>)
+                    <AccountList session={this.props.session} users={this.props.users} onDeleteClick={this.handleDeleteUser} onCheckboxChange={this.handleCheckboxChange} onSubmitClick={this.handleUpdateUser}></AccountList>)
                 }
             </>
         )

@@ -38,16 +38,22 @@ export function saveUser(user) {
         dispatch(beginApiCall())
         return userApi
         .saveUser(user)
-        .then(savedAccount => {
-            if (user.id) {
-                dispatch(updateUserSuccess(savedAccount))
+        .then(updatedAt => {
+            if (user.objectId) {
+                dispatch(updateUserSuccess({...user, updatedAt}))
             } else {
-                dispatch(createUserSuccess(savedAccount))
+                dispatch(createUserSuccess(updatedAt))
             }
         }).catch (error => {
             dispatch(apiCallError())
             throw error
         })
+    }
+}
+
+export function updateUser(user) {
+    return function (dispatch) {
+        return dispatch(updateUserSuccess(user))
     }
 }
 

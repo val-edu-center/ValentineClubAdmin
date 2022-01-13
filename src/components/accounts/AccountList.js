@@ -12,7 +12,7 @@ function isNotDeletable(user, sessionRoles) {
     return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
 }
 
-const AccountList = ({ onDeleteClick, session, users }) => {
+const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, users }) => {
     return (
         <table className="table">
             <thead>
@@ -20,8 +20,9 @@ const AccountList = ({ onDeleteClick, session, users }) => {
                     <th>Account Id</th>
                     <th>Created Date</th>
                     <th>Group</th>
-                    <th>Is Approved</th>
+                    <th>Approved</th>
                     {(session.roles.isBanker) && <th>Bank Account</th>}
+                    {(session.roles.isStaff || session.roles.isDirector) && <th />}
                     {(session.roles.isStaff || session.roles.isDirector) && <th />}
                 </tr>
             </thead>
@@ -40,10 +41,20 @@ const AccountList = ({ onDeleteClick, session, users }) => {
                                     }
                                 </select>
                             </td>
-                            <td>{getIsApproved(user.isApproved)}</td>
+                            <td>{getIsApproved(user, onCheckboxChange)}</td>
                             {(session.roles.isBanker) &&
                                 <td>
                                     <p>Checkbox</p>
+                                </td>
+                            }
+                            {(session.roles.isStaff || session.roles.isDirector) &&
+                                <td>
+                                    <button
+                                        className="btn btn-outline-primary"
+                                        onClick={() => onSubmitClick(user)}
+                                    >
+                                        Submit
+                                    </button>
                                 </td>
                             }
                             {(session.roles.isStaff || session.roles.isDirector) &&
@@ -69,17 +80,17 @@ const getRoleOptionValue = roles => {
 const getRoleOption = role => {
     return <option key={role} value={role}>{role}</option>
 }
-const getIsApproved = isApproved => {
-    if (isApproved) {
-        return <p>Yes</p>
-    } else {
-        return <p>No</p>
-    }
+const getIsApproved = (user, handleChange) => {
+    const isApproved = user.isApproved
+    const id = user.objectId
+    return <input type="checkbox" id={id} name={id} value={id} defaultChecked={isApproved} onChange={handleChange}/>
 }
 AccountList.propTypes = {
     users: PropTypes.array.isRequired,
     session: PropTypes.object.isRequired,
-    onDeleteClick: PropTypes.func.isRequired
+    onDeleteClick: PropTypes.func.isRequired,
+    onCheckboxChange: PropTypes.func.isRequired,
+    onSubmitClick: PropTypes.func.isRequired
 }
 
 export default AccountList
