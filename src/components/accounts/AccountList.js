@@ -12,7 +12,10 @@ function isNotDeletable(user, sessionRoles) {
     return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
 }
 
-const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, users }) => {
+const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, users, bankAccounts }) => {
+    const bankAccountMap = getBankAccountMap(bankAccounts)
+    const isAdmin = session.roles.isStaff || session.roles.isDirector
+    const isBanker = session.roles.isBanker
     return (
         <table className="table">
             <thead>
@@ -21,9 +24,9 @@ const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, 
                     <th>Created Date</th>
                     <th>Group</th>
                     <th>Approved</th>
-                    {(session.roles.isBanker) && <th>Bank Account</th>}
-                    {(session.roles.isStaff || session.roles.isDirector) && <th />}
-                    {(session.roles.isStaff || session.roles.isDirector) && <th />}
+                    { isBanker && <th>Bank Account</th>}
+                    { isAdmin && <th />}
+                    { isAdmin && <th />}
                 </tr>
             </thead>
             <tbody>
@@ -42,12 +45,12 @@ const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, 
                                 </select>
                             </td>
                             <td>{getIsApproved(user, onCheckboxChange)}</td>
-                            {(session.roles.isBanker) &&
-                                <td>
-                                    <p>Checkbox</p>
+                            {isBanker &&
+                                <td> 
+                                    {getBankAccount(bankAccountMap[user.username], user.objectId)}
                                 </td>
                             }
-                            {(session.roles.isStaff || session.roles.isDirector) &&
+                            {isAdmin &&
                                 <td>
                                     <button
                                         className="btn btn-outline-primary"
@@ -57,7 +60,7 @@ const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, 
                                     </button>
                                 </td>
                             }
-                            {(session.roles.isStaff || session.roles.isDirector) &&
+                            {isAdmin &&
                                 <td>
                                     <button
                                         className="btn btn-outline-danger"
@@ -73,6 +76,19 @@ const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, 
             </tbody>
         </table>
     )
+}
+const getBankAccountMap = bankAccounts => {
+    return bankAccounts.reduce(function(map, bankAccount) {
+        map[bankAccount.username] = bankAccount
+        return map
+    }, {})
+}
+const getBankAccount = (account, id) => {
+    if (account) {
+        return <p>{"$ " + account.balance}</p>
+    } else {
+        return <input type="checkbox" id={id} name={id} value={id}/>
+    }
 }
 const getRoleOptionValue = roles => {
     return roleMapper.getGroupRole(roles)
@@ -90,7 +106,8 @@ AccountList.propTypes = {
     session: PropTypes.object.isRequired,
     onDeleteClick: PropTypes.func.isRequired,
     onCheckboxChange: PropTypes.func.isRequired,
-    onSubmitClick: PropTypes.func.isRequired
+    onSubmitClick: PropTypes.func.isRequired,
+    bankAccounts: PropTypes.array.isRequired
 }
 
 export default AccountList
