@@ -8,13 +8,31 @@ export function getAllAccounts() {
     const state = loadFromLocalStorage()
     const sessionToken = state.session.sessionToken
     return fetch(baseUrl, {
-      headers: {
-        "content-type": "application/json",
-        "X-Parse-Application-Id": appId,
-        "X-Parse-REST-API-Key": restApiKey,
-        "X-Parse-Session-Token": sessionToken
-      }
+        headers: {
+            "content-type": "application/json",
+            "X-Parse-Application-Id": appId,
+            "X-Parse-REST-API-Key": restApiKey,
+            "X-Parse-Session-Token": sessionToken
+        }
     })
-      .then(handleResponse)
-      .catch(handleError);
-  }
+        .then(handleResponse)
+        .catch(handleError);
+}
+
+export function createBankAccount(username) {
+    const state = loadFromLocalStorage()
+    const sessionToken = state.session.sessionToken
+    return fetch(baseUrl, {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+            "X-Parse-Application-Id": appId,
+            "X-Parse-REST-API-Key": restApiKey,
+            "X-Parse-Session-Token": sessionToken
+        },
+        body: JSON.stringify({username, balance: 0})
+    })
+        .then(handleResponse)
+        .catch(handleError);
+
+}

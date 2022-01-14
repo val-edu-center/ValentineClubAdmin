@@ -24,11 +24,26 @@ class AccountsPage extends React.Component {
         }
     }
 
-    handleUpdateUser = user => {
+    handleSaveUser = user => {
         toast.success("User updated")
         this.props.actions.users.saveUser(user).catch(
             error => toast.error('Update failed. ' + error.message, { autoClose: false })
         )
+        if (user.createBankAccount) {
+            this.props.actions.bankAccounts.createBankAccount(user.username).catch(
+                error => toast.error('Bank account creation failed. ' + error.message, { autoClose: false })
+            )
+        }
+        // let myObject = {
+        //     "ircEvent": "PRIVMSG",
+        //     "method": "newURI",
+        //     "regex": "^http://.*"
+        //   };
+          
+        //   const {regex, ...newObj} = myObject;
+          
+        //   console.log(newObj);   // has no 'regex' key
+        //   console.log(myObject); // remains unchanged
     }
 
     handleDeleteUser = user => {
@@ -36,6 +51,7 @@ class AccountsPage extends React.Component {
         this.props.actions.users.deleteUser(user).catch(
             error => toast.error('Delete failed. ' + error.message, { autoClose: false })
         )
+        this.props.actions.bankAccounts
     }
 
     flipIsApproved = user => {
@@ -45,9 +61,29 @@ class AccountsPage extends React.Component {
         }
     }
 
-    handleCheckboxChange = event => { 
+    flipCreateBankAccount = user => {
+        if (user.createBankAccount) {
+            return {
+                ...user,
+                createBankAccount: false
+            }
+        } else {
+            return {
+                ...user,
+                createBankAccount: true
+            }
+        }
+    }
+
+    handleApprovedCheckboxChange = event => { 
         const objectId = event.target.id
         const newUser = this.flipIsApproved(this.props.users.find(user => user.objectId === objectId))
+        this.props.actions.users.updateUser(newUser)
+    }
+
+    handleBankAccountCheckboxChange = event => {
+        const objectId = event.target.id
+        const newUser = this.flipCreateBankAccount(this.props.users.find(user => user.objectId === objectId))
         this.props.actions.users.updateUser(newUser)
     }
 
@@ -58,7 +94,7 @@ class AccountsPage extends React.Component {
                 {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
                 <h2>Accounts</h2>
                 {this.props.loading ? (<Spinner />) : (
-                    <AccountList bankAccounts={this.props.bankAccounts} session={this.props.session} users={this.props.users} onDeleteClick={this.handleDeleteUser} onCheckboxChange={this.handleCheckboxChange} onSubmitClick={this.handleUpdateUser}></AccountList>)
+                    <AccountList bankAccounts={this.props.bankAccounts} session={this.props.session} users={this.props.users} onDeleteClick={this.handleDeleteUser} onApprovedCheckboxChange={this.handleApprovedCheckboxChange} onSubmitClick={this.handleSaveUser} onBankAccountCheckboxChange={this.handleBankAccountCheckboxChange}></AccountList>)
                 }
             </>
         )

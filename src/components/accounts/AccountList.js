@@ -12,7 +12,7 @@ function isNotDeletable(user, sessionRoles) {
     return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
 }
 
-const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, users, bankAccounts }) => {
+const AccountList = ({ onDeleteClick, onApprovedCheckboxChange, onBankAccountCheckboxChange, onSubmitClick, session, users, bankAccounts }) => {
     const bankAccountMap = getBankAccountMap(bankAccounts)
     const isAdmin = session.roles.isStaff || session.roles.isDirector
     const isBanker = session.roles.isBanker
@@ -44,10 +44,10 @@ const AccountList = ({ onDeleteClick, onCheckboxChange, onSubmitClick, session, 
                                     }
                                 </select>
                             </td>
-                            <td>{getIsApproved(user, onCheckboxChange)}</td>
+                            <td>{getIsApproved(user, onApprovedCheckboxChange)}</td>
                             {isBanker &&
                                 <td> 
-                                    {getBankAccount(bankAccountMap[user.username], user.objectId)}
+                                    {getBankAccount(bankAccountMap[user.username], user.objectId, onBankAccountCheckboxChange)}
                                 </td>
                             }
                             {isAdmin &&
@@ -83,11 +83,11 @@ const getBankAccountMap = bankAccounts => {
         return map
     }, {})
 }
-const getBankAccount = (account, id) => {
+const getBankAccount = (account, id, handleChange) => {
     if (account) {
         return <p>{"$ " + account.balance}</p>
     } else {
-        return <input type="checkbox" id={id} name={id} value={id}/>
+        return <input type="checkbox" id={id} name={id} value={id} onChange={handleChange}/>
     }
 }
 const getRoleOptionValue = roles => {
@@ -105,7 +105,8 @@ AccountList.propTypes = {
     users: PropTypes.array.isRequired,
     session: PropTypes.object.isRequired,
     onDeleteClick: PropTypes.func.isRequired,
-    onCheckboxChange: PropTypes.func.isRequired,
+    onApprovedCheckboxChange: PropTypes.func.isRequired,
+    onBankAccountCheckboxChange: PropTypes.func.isRequired,
     onSubmitClick: PropTypes.func.isRequired,
     bankAccounts: PropTypes.array.isRequired
 }
