@@ -4,7 +4,7 @@ import * as roleMapper from "../../utility/RoleMapper"
 import Session from "../../model/Session"
 
 function mapSession(session) {
-    const roles = roleMapper.getAllRoles(session.roles)
+    const roles = roleMapper.getRoles(session.roles)
     const newSession = new Session
     newSession.sessionToken = session.sessionToken
     newSession.roles = roles

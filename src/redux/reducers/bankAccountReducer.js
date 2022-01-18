@@ -6,7 +6,7 @@ export default function bankAccountReducer(state = initialState.bankAccounts, ac
         case LOAD_BANK_ACCOUNTS_SUCCESS:
             return action.bankAccounts
         case CREATE_BANK_ACCOUNT_SUCCESS:
-            return [...state, {...action.account}]
+            return [...state, {...action.bankAccount}]
         default:
             return state
     }

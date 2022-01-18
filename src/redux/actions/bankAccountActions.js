@@ -23,7 +23,6 @@ export function loadBankAccounts() {
             throw error
         })
     }
-
 }
 
 export function createBankAccount(username) {

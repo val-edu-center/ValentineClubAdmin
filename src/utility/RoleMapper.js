@@ -13,7 +13,7 @@ const DESIGNER_ROLE = '3D Designer'
 const PRINTER_ROLE = '3D Printer'
 export const roleGroups = [CADET_ROLE, PREP_ROLE, JUNIOR_ROLE, INTERMEDIATE_ROLE, TEEN_ROLE, STAFF_ROLE, DIRECTOR_ROLE]
 
-export function getAllRoles(roleArray) {
+export function getRoles(roleArray) {
     const roles = new Roles
     if (isDirector(roleArray)) {
         roles.isDirector = true

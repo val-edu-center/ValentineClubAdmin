@@ -8,11 +8,11 @@ function getTime(time) {
 }
 
 function isNotDeletable(user, sessionRoles) {
-    const roles = roleMapper.getAllRoles(user.roles)
+    const roles = roleMapper.getRoles(user.roles)
     return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
 }
 
-const AccountList = ({ onDeleteClick, onApprovedCheckboxChange, onBankAccountCheckboxChange, onSubmitClick, session, users, bankAccounts }) => {
+const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountChange, onGroupRoleChange, onSubmitClick, session, users, bankAccounts }) => {
     const bankAccountMap = getBankAccountMap(bankAccounts)
     const isAdmin = session.roles.isStaff || session.roles.isDirector
     const isBanker = session.roles.isBanker
@@ -20,13 +20,13 @@ const AccountList = ({ onDeleteClick, onApprovedCheckboxChange, onBankAccountChe
         <table className="table">
             <thead>
                 <tr>
-                    <th>Account Id</th>
+                    <th>Username</th>
                     <th>Created Date</th>
                     <th>Group</th>
-                    <th>Approved</th>
-                    { isBanker && <th>Bank Account</th>}
-                    { isAdmin && <th />}
-                    { isAdmin && <th />}
+                    {isAdmin && <th>Approved</th>}
+                    {isBanker && <th>Bank Account</th>}
+                    {isAdmin && <th />}
+                    {isAdmin && <th />}
                 </tr>
             </thead>
             <tbody>
@@ -37,17 +37,11 @@ const AccountList = ({ onDeleteClick, onApprovedCheckboxChange, onBankAccountChe
                                 <p>{user.username}</p>
                             </td>
                             <td> {getTime(user.createdAt)} </td>
-                            <td>
-                                <select name="groups" id="group-select" value={getRoleOptionValue(user.roles)} readOnly >
-                                    {
-                                        roleMapper.roleGroups.map(r => getRoleOption(r))
-                                    }
-                                </select>
-                            </td>
-                            <td>{getIsApproved(user, onApprovedCheckboxChange)}</td>
+                            <td>{getGroupRoleInput(user, isAdmin, onGroupRoleChange) }</td>
+                            {isBanker && <td>{getIsApproved(user, onIsApprovedChange)}</td>}
                             {isBanker &&
-                                <td> 
-                                    {getBankAccount(bankAccountMap[user.username], user.objectId, onBankAccountCheckboxChange)}
+                                <td>
+                                    {getBankAccount(bankAccountMap[user.username], user.objectId, onCreateBankAccountChange)}
                                 </td>
                             }
                             {isAdmin &&
@@ -77,8 +71,25 @@ const AccountList = ({ onDeleteClick, onApprovedCheckboxChange, onBankAccountChe
         </table>
     )
 }
+const getGroupRoleInput = (user, isAdmin, onChange) => {
+    if (isAdmin) {
+        return <select name="groups" id={user.objectId} value={getRoleOptionValue(user.roles)} onChange={onChange}>
+            {
+                roleMapper.roleGroups.map(r => getRoleOption(r))
+            }
+        </select>
+    } else {
+        return <select name="groups" id="group-select" value={getRoleOptionValue(user.roles)} readOnly >
+            {
+                roleMapper.roleGroups.map(r => getRoleOption(r))
+            }
+        </select>
+
+    }
+}
+
 const getBankAccountMap = bankAccounts => {
-    return bankAccounts.reduce(function(map, bankAccount) {
+    return bankAccounts.reduce(function (map, bankAccount) {
         map[bankAccount.username] = bankAccount
         return map
     }, {})
@@ -87,7 +98,7 @@ const getBankAccount = (account, id, handleChange) => {
     if (account) {
         return <p>{"$ " + account.balance}</p>
     } else {
-        return <input type="checkbox" id={id} name={id} value={id} onChange={handleChange}/>
+        return <input type="checkbox" id={id} name={id} value={id} onChange={handleChange} />
     }
 }
 const getRoleOptionValue = roles => {
@@ -99,16 +110,17 @@ const getRoleOption = role => {
 const getIsApproved = (user, handleChange) => {
     const isApproved = user.isApproved
     const id = user.objectId
-    return <input type="checkbox" id={id} name={id} value={id} defaultChecked={isApproved} onChange={handleChange}/>
+    return <input type="checkbox" id={id} name={id} value={id} defaultChecked={isApproved} onChange={handleChange} />
 }
 AccountList.propTypes = {
     users: PropTypes.array.isRequired,
     session: PropTypes.object.isRequired,
     onDeleteClick: PropTypes.func.isRequired,
-    onApprovedCheckboxChange: PropTypes.func.isRequired,
-    onBankAccountCheckboxChange: PropTypes.func.isRequired,
+    onIsApprovedChange: PropTypes.func.isRequired,
+    onCreateBankAccountChange: PropTypes.func.isRequired,
     onSubmitClick: PropTypes.func.isRequired,
-    bankAccounts: PropTypes.array.isRequired
+    bankAccounts: PropTypes.array.isRequired,
+    onGroupRoleChange: PropTypes.func.isRequired
 }
 
 export default AccountList
