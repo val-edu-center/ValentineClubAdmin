@@ -38,7 +38,7 @@ const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountCha
                             </td>
                             <td> {getTime(user.createdAt)} </td>
                             <td>{getGroupRoleInput(user, isAdmin, onGroupRoleChange) }</td>
-                            {isBanker && <td>{getIsApproved(user, onIsApprovedChange)}</td>}
+                            {isAdmin && <td>{getIsApproved(user, onIsApprovedChange)}</td>}
                             {isBanker &&
                                 <td>
                                     {getBankAccount(bankAccountMap[user.username], user.objectId, onCreateBankAccountChange)}
