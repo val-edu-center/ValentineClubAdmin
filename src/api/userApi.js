@@ -1,35 +1,30 @@
-import { handleResponse, handleError } from "./apiUtils";
+import { handleResponse, handleError, loadFromLocalStorage } from "./apiUtils";
 const baseUrl = process.env.BACK4APP_API_URL + "/users/";
 const appId = process.env.BACK4APP_APP_ID;
 const restApiKey = process.env.BACK4APP_REST_API_KEY;
 
-const loadFromLocalStorage = () => {
-  try {
-      const stateStr = localStorage.getItem('state');
-      return stateStr ? JSON.parse(stateStr) : undefined;
-  } catch (e) {
-      console.error(e);
-      return undefined;
-  }
-};
-
 export function getUsers() {
+  const state = loadFromLocalStorage()
+  const sessionToken = state.session.sessionToken
   return fetch(baseUrl, {
     headers: {
       "content-type": "application/json",
       "X-Parse-Application-Id": appId,
-      "X-Parse-REST-API-Key": restApiKey
+      "X-Parse-REST-API-Key": restApiKey,
+      "X-Parse-Session-Token": sessionToken
     }
   })
     .then(handleResponse)
     .catch(handleError);
 }
 //TODO handle puts
-export function saveUser(user) {
+export function saveUser(rawUser) {
   const state = loadFromLocalStorage()
   const sessionToken = state.session.sessionToken
+  //TODO create user mapper
+  const user = {username: rawUser.username, objectId: rawUser.objectId, isApproved: rawUser.isApproved, roles: rawUser.roles}
   return fetch(baseUrl + (user.objectId || ""), {
-    method: user.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
+    method: user.objectId ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
     headers: {
       "content-type": "application/json",
       "X-Parse-Application-Id": appId,

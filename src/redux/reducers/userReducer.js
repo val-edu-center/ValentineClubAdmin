@@ -7,7 +7,7 @@ export default function userReducer(state = initialState.users, action) {
             return [...state, {...action.user}]
         case UPDATE_USER_SUCCESS:
             return state.map (
-                user => user.id === action.user.id ? action.user : user 
+                user => user.objectId === action.user.objectId ? action.user : user 
             )
         case LOAD_USERS_SUCCESS:
             return action.users

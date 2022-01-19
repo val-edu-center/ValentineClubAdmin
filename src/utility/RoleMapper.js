@@ -1,6 +1,5 @@
 import Roles from "../model/Roles"
 
-const GUEST_ROLE = 'Guest'
 const CADET_ROLE = 'Cadet'
 const PREP_ROLE = 'Prep'
 const JUNIOR_ROLE = 'Junior'
@@ -13,7 +12,7 @@ const DESIGNER_ROLE = '3D Designer'
 const PRINTER_ROLE = '3D Printer'
 export const roleGroups = [CADET_ROLE, PREP_ROLE, JUNIOR_ROLE, INTERMEDIATE_ROLE, TEEN_ROLE, STAFF_ROLE, DIRECTOR_ROLE]
 
-export function getAllRoles(roleArray) {
+export function getRoles(roleArray) {
     const roles = new Roles
     if (isDirector(roleArray)) {
         roles.isDirector = true
@@ -59,7 +58,7 @@ export function getGroupRole(roleArray) {
         return CADET_ROLE
     }
     else {
-        return GUEST_ROLE
+        return undefined
     }
 }
 

@@ -15,3 +15,13 @@ export function handleError(error) {
   console.error("API call failed. " + error);
   throw error;
 }
+
+export function loadFromLocalStorage() {
+  try {
+      const stateStr = localStorage.getItem('state');
+      return stateStr ? JSON.parse(stateStr) : undefined;
+  } catch (e) {
+      console.error(e);
+      return undefined;
+  }
+}

@@ -24,10 +24,10 @@ const LoginForm = ({
         onChange={onChange}
         error={errors.username}
       />
-
       <TextInput
         name="password"
         label="Password"
+        secureTextEntry={true}
         value={credentials.password}
         onChange={onChange}
         error={errors.password}
