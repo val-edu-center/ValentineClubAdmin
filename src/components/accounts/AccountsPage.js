@@ -24,11 +24,11 @@ class AccountsPage extends React.Component {
                 alert("Loading accounts failed " + error)
             })
         }
-        if (isAdmin && allRoles.length == 0) {
-            actions.roles.loadAllRoles().catch(error => {
-                alert("Loading roles failed " + error)
-            })
-        }
+        // if (isAdmin && allRoles.length == 0) {
+        //     actions.roles.loadAllRoles().catch(error => {
+        //         alert("Loading roles failed " + error)
+        //     })
+        // }
     }
 
     handleSaveUser = user => {

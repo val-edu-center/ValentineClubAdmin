@@ -37,7 +37,7 @@ const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountCha
                                 <p>{user.username}</p>
                             </td>
                             <td> {getTime(user.createdAt)} </td>
-                            <td>{getGroupRoleInput(user, isAdmin, onGroupRoleChange) }</td>
+                            <td>{getGroupRoleInput(user, isAdmin, onGroupRoleChange)}</td>
                             {isAdmin && <td>{getIsApproved(user, onIsApprovedChange)}</td>}
                             {isBanker &&
                                 <td>
@@ -72,20 +72,26 @@ const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountCha
     )
 }
 const getGroupRoleInput = (user, isAdmin, onChange) => {
-    if (isAdmin) {
-        return <select name="groups" id={user.objectId} value={getRoleOptionValue(user.roles)} onChange={onChange}>
-            {
-                roleMapper.roleGroups.map(r => getRoleOption(r))
-            }
-        </select>
-    } else {
-        return <select name="groups" id="group-select" value={getRoleOptionValue(user.roles)} readOnly >
-            {
-                roleMapper.roleGroups.map(r => getRoleOption(r))
-            }
-        </select>
+    const groupRole = roleMapper.getGroupRole(user.roles)
+    if (groupRole) {
+        if (isAdmin) {
+            return <select name="groups" id={user.objectId} value={groupRole} onChange={onChange}>
+                {
+                    roleMapper.roleGroups.map(r => getRoleOption(r))
+                }
+            </select>
+        } else {
+            return <select name="groups" id="group-select" value={groupRole} readOnly >
+                {
+                    roleMapper.roleGroups.map(r => getRoleOption(r))
+                }
+            </select>
 
+        }
+    } else {
+        return <p>N/A</p>
     }
+
 }
 
 const getBankAccountMap = bankAccounts => {
@@ -100,9 +106,6 @@ const getBankAccount = (account, id, handleChange) => {
     } else {
         return <input type="checkbox" id={id} name={id} value={id} onChange={handleChange} />
     }
-}
-const getRoleOptionValue = roles => {
-    return roleMapper.getGroupRole(roles)
 }
 const getRoleOption = role => {
     return <option key={role} value={role}>{role}</option>

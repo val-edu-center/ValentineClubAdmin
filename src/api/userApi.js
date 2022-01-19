@@ -21,6 +21,7 @@ export function getUsers() {
 export function saveUser(rawUser) {
   const state = loadFromLocalStorage()
   const sessionToken = state.session.sessionToken
+  //TODO create user mapper
   const user = {username: rawUser.username, objectId: rawUser.objectId, isApproved: rawUser.isApproved, roles: rawUser.roles}
   return fetch(baseUrl + (user.objectId || ""), {
     method: user.objectId ? "PUT" : "POST", // POST for create, PUT to update when id already exists.

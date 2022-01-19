@@ -1,6 +1,5 @@
 import Roles from "../model/Roles"
 
-const GUEST_ROLE = 'Guest'
 const CADET_ROLE = 'Cadet'
 const PREP_ROLE = 'Prep'
 const JUNIOR_ROLE = 'Junior'
@@ -59,7 +58,7 @@ export function getGroupRole(roleArray) {
         return CADET_ROLE
     }
     else {
-        return GUEST_ROLE
+        return undefined
     }
 }
 
