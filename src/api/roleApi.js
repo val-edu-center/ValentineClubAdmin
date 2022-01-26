@@ -1,4 +1,5 @@
 import { handleResponse, handleError, loadFromLocalStorage } from "./apiUtils"
+import Parse from 'parse/dist/parse.min.js'
 
 const baseUrl = process.env.BACK4APP_API_URL + "/roles/"
 const appId = process.env.BACK4APP_APP_ID
@@ -17,4 +18,17 @@ export function getAllRoles() {
     })
         .then(handleResponse)
         .catch(handleError)
+}
+
+export const getAllParseRoles = async () => {
+    const query = new Parse.Query(Parse.Role)
+    const results = await query.find()
+    return results
+    
+}
+
+export const getUsersForRole = async (role) => {
+    const query = role.getUsers().query()
+    const results = query.find
+    return results
 }

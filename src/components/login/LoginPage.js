@@ -49,7 +49,7 @@ const LoginPage = ({ session, actions, history, ...props }) => {
         event.preventDefault()
         if (!formIsValid()) return 
         setSaving(true)
-        actions.session.loadSession(credentials).then( () => {
+        actions.session.loadSessionParse(credentials).then( () => {
             toast.success("Successful Login")
             history.push("/")
         }).catch (error => {

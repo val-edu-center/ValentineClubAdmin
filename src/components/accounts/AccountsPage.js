@@ -9,10 +9,11 @@ import { Redirect } from 'react-router-dom'
 import Spinner from "../common/Spinner"
 import { toast } from "react-toastify"
 import * as roleActions from "../../redux/actions/roleActions"
+import * as roleMapper from "../../utility/RoleMapper"
 
 class AccountsPage extends React.Component {
     componentDidMount() {
-        const { users, actions, bankAccounts, session, allRoles } = this.props
+        const { users, actions, bankAccounts, session, allRoles, allRolesMap } = this.props
         const isAdmin = session.roles.isStaff || session.roles.isDirector
         if (users.length == 0 && session.sessionToken) {
             actions.users.loadUsers().catch(error => {
@@ -24,11 +25,13 @@ class AccountsPage extends React.Component {
                 alert("Loading accounts failed " + error)
             })
         }
-        // if (isAdmin && allRoles.length == 0) {
-        //     actions.roles.loadAllRoles().catch(error => {
-        //         alert("Loading roles failed " + error)
-        //     })
-        // }
+        if (isAdmin && allRoles.length == 0) {
+            actions.roles.loadAllRoles().catch(error => {
+                alert("Loading roles failed " + error)
+            })
+        } else if(allRolesMap === null) {
+            actions.roles.loadAllRolesMap()
+        }
     }
 
     handleSaveUser = user => {
@@ -36,6 +39,10 @@ class AccountsPage extends React.Component {
         this.props.actions.users.saveUser(user).catch(
             error => toast.error('Update failed. ' + error.message, { autoClose: false })
         )
+        const groupRole = roleMapper.getGroupRole(user.roles)
+
+        console.log(this.props.allRolesMap)
+        console.log(this.props.allRolesMap[groupRole])
         if (user.createBankAccount) {
             this.props.actions.bankAccounts.createBankAccount(user.username).catch(
                 error => toast.error('Bank account creation failed. ' + error.message, { autoClose: false })
@@ -129,13 +136,15 @@ AccountsPage.propTypes = {
     bankAccounts: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
-    allRoles: PropTypes.array.isRequired
+    allRoles: PropTypes.array.isRequired,
+    allRolesMap: PropTypes.object
 }
 
 //ownProps not need, so it is removed
 function mapStateToProps(state) {
     return {
         allRoles: state.allRoles,
+        allRolesMap: state.allRolesMap,
         bankAccounts: state.bankAccounts,
         users: state.users,
         session: state.session,

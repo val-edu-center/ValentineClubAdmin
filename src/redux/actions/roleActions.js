@@ -10,13 +10,29 @@ export function loadAllRoles() {
     return function (dispatch) {
         dispatch(beginApiCall)
         return roleApi
-        .getAllRoles()
+        .getAllParseRoles()
         .then(response => {
-            dispatch(loadAllRolesSuccess(response.results));
+            dispatch(loadAllRolesSuccess(response));
         })
         .catch (error => {
             dispatch(apiCallError())
             throw error
         })
     }
+}
+
+export function loadUsersForRole(role) {
+    return function (dispatch) {
+        dispatch(beginApiCall)
+        return roleApi
+        .getUsersForRole(role)
+        .then(response => {
+            dispatch(loadAllRolesSuccess(response));
+        })
+        .catch (error => {
+            dispatch(apiCallError())
+            throw error
+        })
+    }
+
 }

@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import AccountsPage from './accounts/AccountsPage'
 import UnauthorizedPage from './common/UnauthorizedPage'
 import LogoutPage from './logout/LogoutPage'
-import Parse from 'parse/dist/parse.min.js';
+import Parse from 'parse/dist/parse.min.js'
 
 // Your Parse initialization configuration goes here
 const PARSE_APPLICATION_ID = 'pen8j01Zc3JaqVkHmMCbZud1AhOaOMeBYTpzlUhw';
