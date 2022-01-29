@@ -29,6 +29,6 @@ export const getAllParseRoles = async () => {
 
 export const getUsersForRole = async (role) => {
     const query = role.getUsers().query()
-    const results = query.find
+    const results = await query.find()
     return results
 }

@@ -1,24 +1,23 @@
-import { LOAD_ALL_ROLES_SUCCESS } from "../actions/actionTypes"
+import { LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE } from "../actions/actionTypes"
 import initialState from "./initialState"
 
-export default function roleReducer(state = initialState.allRoles, action) {
+export default function roleReducer(state = initialState.roles, action) {
     switch(action.type) {
         case LOAD_ALL_ROLES_SUCCESS:
-            return action.allRoles
-            //Refactor so that state is an object with .all (allRoles) and .toMap (allRolesMap) fields
-            //Do this when the all roles map changes
-            // const getAllRolesMap = allRoles => {
-            //     const allRolesMap = allRoles.map(role => {
-            //         const users = role.getUsers()
-            //         const name = role.get("name")
-            //         return {name, users}
-            //     }).reduce(function(map, role) {
-            //         map[role.name] = role.users;
-            //         return map;
-            //     }, {})
-            //     return allRolesMap
-            // }
+            return {...state, all: action.allRoles}
+        case LOAD_USERS_FOR_ROLE:
+            return {...state, toMap: getNewRolesMap(state, action)}
         default:
             return state
     }
+}
+
+function getNewRolesMap(state, action) {
+    const newUsers = [{name: action.role.get('name'), users: action.users}]
+    const oldMap = state.toMap
+    console.log(oldMap)
+    return newUsers.reduce(function(map, role) {
+        map[role.name] = role.users;
+        return map;
+    }, oldMap)
 }

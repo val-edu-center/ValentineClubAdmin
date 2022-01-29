@@ -26,11 +26,11 @@ class AccountsPage extends React.Component {
             })
         }
         if (isAdmin && allRoles.length == 0) {
-            actions.roles.loadAllRoles().catch(error => {
+            actions.roles.loadAllRoles()
+            .then(roles => roles.map(r => actions.roles.loadUsersForRole(r)))
+            .catch(error => {
                 alert("Loading roles failed " + error)
             })
-        } else if(allRolesMap === null) {
-            actions.roles.loadAllRolesMap()
         }
     }
 
@@ -41,8 +41,7 @@ class AccountsPage extends React.Component {
         )
         const groupRole = roleMapper.getGroupRole(user.roles)
 
-        console.log(this.props.allRolesMap)
-        console.log(this.props.allRolesMap[groupRole])
+        // console.log(this.props.allRolesMap[groupRole])
         if (user.createBankAccount) {
             this.props.actions.bankAccounts.createBankAccount(user.username).catch(
                 error => toast.error('Bank account creation failed. ' + error.message, { autoClose: false })
@@ -117,6 +116,7 @@ class AccountsPage extends React.Component {
     }
 
     render() {
+        console.log(this.props.allRolesMap)
         return (
             <>
                 {!this.props.session.sessionToken && <Redirect to="/unauthorized" />}
@@ -143,8 +143,8 @@ AccountsPage.propTypes = {
 //ownProps not need, so it is removed
 function mapStateToProps(state) {
     return {
-        allRoles: state.allRoles,
-        allRolesMap: state.allRolesMap,
+        allRoles: state.roles.all,
+        allRolesMap: state.roles.toMap,
         bankAccounts: state.bankAccounts,
         users: state.users,
         session: state.session,
