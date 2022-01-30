@@ -6,13 +6,14 @@ export default function userReducer(state = initialState.users, action) {
         case CREATE_USER_SUCCESS:
             return [...state, {...action.user}]
         case UPDATE_USER_SUCCESS:
+            console.log(action.user)
             return state.map (
-                user => user.objectId === action.user.objectId ? action.user : user 
+                user => user.id === action.user.id ? action.user : user 
             )
         case LOAD_USERS_SUCCESS:
             return action.users
         case DELETE_USER_OPTIMISTIC:
-            return state.filter (user => user.objectId !== action.user.objectId)
+            return state.filter (user => user.id !== action.user.id)
         default:
             return state
     }

@@ -32,3 +32,12 @@ export const getUsersForRole = async (role) => {
     const results = await query.find()
     return results
 }
+
+export const removeUser = async (role, user) => {
+    console.log({role,user})
+    role.getUsers().remove(user)
+}
+export const addUser = async (role, user) => {
+    console.log({role,user})
+    role.getUsers().add(user)
+}

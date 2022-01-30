@@ -22,9 +22,9 @@ export function loadUsers() {
     return function (dispatch) {
         dispatch(beginApiCall)
         return userApi
-        .getUsers()
+        .getUsersParse()
         .then(response => {
-            dispatch(loadUsersSuccess(response.results));
+            dispatch(loadUsersSuccess(response));
         })
         .catch (error => {
             dispatch(apiCallError())
@@ -37,9 +37,9 @@ export function saveUser(user) {
     return function (dispatch) {
         dispatch(beginApiCall())
         return userApi
-        .saveUser(user)
+        .saveUserParse(user)
         .then(updatedAt => {
-            if (user.objectId) {
+            if (user.id) {
                 dispatch(updateUserSuccess({...user, updatedAt}))
             } else {
                 dispatch(createUserSuccess(updatedAt))

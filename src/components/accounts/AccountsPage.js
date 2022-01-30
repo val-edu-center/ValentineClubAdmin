@@ -13,19 +13,19 @@ import * as roleMapper from "../../utility/RoleMapper"
 
 class AccountsPage extends React.Component {
     componentDidMount() {
-        const { users, actions, bankAccounts, session, allRoles, allRolesMap } = this.props
+        const { users, actions, bankAccounts, session, allRoles} = this.props
         const isAdmin = session.roles.isStaff || session.roles.isDirector
-        if (users.length == 0 && session.sessionToken) {
+        if (users.length === 0 && session.sessionToken) {
             actions.users.loadUsers().catch(error => {
                 alert("Loading users failed " + error)
             })
         }
-        if (bankAccounts.length == 0 && session.sessionToken && session.roles.isBanker) {
+        if (bankAccounts.length === 0 && session.sessionToken && session.roles.isBanker) {
             actions.bankAccounts.loadBankAccounts().catch(error => {
                 alert("Loading accounts failed " + error)
             })
         }
-        if (isAdmin && allRoles.length == 0) {
+        if (isAdmin && allRoles.length === 0) {
             actions.roles.loadAllRoles()
             .then(roles => roles.map(r => actions.roles.loadUsersForRole(r)))
             .catch(error => {
@@ -35,15 +35,25 @@ class AccountsPage extends React.Component {
     }
 
     handleSaveUser = user => {
+        console.log(this.props.allRoles.map(r => r.id))
         toast.success("User updated")
         this.props.actions.users.saveUser(user).catch(
             error => toast.error('Update failed. ' + error.message, { autoClose: false })
         )
-        const groupRole = roleMapper.getGroupRole(user.roles)
-
-        // console.log(this.props.allRolesMap[groupRole])
+        const newRoleName = roleMapper.getGroupRole(user.get("roles"))
+        const oldRoleName = roleMapper.getGroupRole(this.props.usersToRoles.get(user.id))
+        if (newRoleName !== oldRoleName) {
+            const newRole = this.props.allRoles.find(role => role.getName() === newRoleName)
+            const oldRole = this.props.allRoles.find(role => role.getName() === oldRoleName)
+            this.props.actions.roles.removeUser(oldRole, user).catch(
+                error => toast.error('Role removal failed. ' + error.message, { autoClose: false })
+            )
+            this.props.actions.roles.addUser(newRole, user).catch(
+                error => toast.error('Role addition failed. ' + error.message, { autoClose: false })
+            )
+        }
         if (user.createBankAccount) {
-            this.props.actions.bankAccounts.createBankAccount(user.username).catch(
+            this.props.actions.bankAccounts.createBankAccount(user.getUsername()).catch(
                 error => toast.error('Bank account creation failed. ' + error.message, { autoClose: false })
             )
         }
@@ -99,24 +109,23 @@ class AccountsPage extends React.Component {
     handleGroupeRoleChange = event => {
         const objectId = event.target.id
         const newRole = event.target.value
-        const newUser = this.changeGroupRole(this.props.users.find(user => user.objectId === objectId), newRole)
+        const newUser = this.changeGroupRole(this.props.users.find(user => user.id === objectId), newRole)
         this.props.actions.users.updateUser(newUser)
     }
 
     handleIsApprovedChange = event => { 
         const objectId = event.target.id
-        const newUser = this.flipIsApproved(this.props.users.find(user => user.objectId === objectId))
+        const newUser = this.flipIsApproved(this.props.users.find(user => user.id === objectId))
         this.props.actions.users.updateUser(newUser)
     }
 
     handleCreateBankAccountChange = event => {
         const objectId = event.target.id
-        const newUser = this.flipCreateBankAccount(this.props.users.find(user => user.objectId === objectId))
+        const newUser = this.flipCreateBankAccount(this.props.users.find(user => user.id === objectId))
         this.props.actions.users.updateUser(newUser)
     }
 
     render() {
-        console.log(this.props.allRolesMap)
         return (
             <>
                 {!this.props.session.sessionToken && <Redirect to="/unauthorized" />}
@@ -137,14 +146,14 @@ AccountsPage.propTypes = {
     users: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
     allRoles: PropTypes.array.isRequired,
-    allRolesMap: PropTypes.object
+    usersToRoles: PropTypes.object.isRequired
 }
 
 //ownProps not need, so it is removed
 function mapStateToProps(state) {
     return {
         allRoles: state.roles.all,
-        allRolesMap: state.roles.toMap,
+        usersToRoles: state.roles.toMap,
         bankAccounts: state.bankAccounts,
         users: state.users,
         session: state.session,
