@@ -4,17 +4,32 @@ import initialState from './initialState'
 export default function userReducer(state = initialState.users, action) {
     switch(action.type) {
         case CREATE_USER_SUCCESS:
-            return [...state, {...action.user}]
+            return [...state, createUser()]
         case UPDATE_USER_SUCCESS:
-            console.log(action.user)
             return state.map (
                 user => user.id === action.user.id ? action.user : user 
             )
         case LOAD_USERS_SUCCESS:
-            return action.users
+            return action.users.map(user => mapUserParse(user))
         case DELETE_USER_OPTIMISTIC:
             return state.filter (user => user.id !== action.user.id)
         default:
             return state
     }
+
+}
+
+function createUser() {
+    return {user: new User, parseObject: null}
+}
+
+function mapUserParse(parseUser) {
+    const user = new User
+    user.createdAt = parseUser.createdAt
+    user.id = parseUser.id
+    user.username = parseUser.getUsername()
+    user.roles = parseUser.get("roles")
+    user.isApproved = parseUser.get("isApproved")
+    user.parseObject = parseUser
+    return user
 }

@@ -2,8 +2,8 @@ import { CREATE_USER_SUCCESS, UPDATE_USER_SUCCESS, LOAD_USERS_SUCCESS, DELETE_US
 import * as userApi from "../../api/userApi"
 import { apiCallError, beginApiCall } from "./apiStatusActions";
 
-export function createUserSuccess(user) {
-    return { type: CREATE_USER_SUCCESS, user}
+export function createUserSuccess() {
+    return { type: CREATE_USER_SUCCESS}
 }
 
 export function updateUserSuccess(user) {
@@ -39,10 +39,11 @@ export function saveUser(user) {
         return userApi
         .saveUserParse(user)
         .then(updatedAt => {
+            console.log(updatedAt)
             if (user.id) {
-                dispatch(updateUserSuccess({...user, updatedAt}))
+                dispatch(updateUserSuccess(user))
             } else {
-                dispatch(createUserSuccess(updatedAt))
+                dispatch(createUserSuccess())
             }
         }).catch (error => {
             dispatch(apiCallError())
@@ -60,6 +61,6 @@ export function updateUser(user) {
 export function deleteUser(user) {
     return function (dispatch) {
         dispatch(deleteUserOptimistic(user))
-        return userApi.deleteUser(user.objectId)
+        return userApi.deleteUser(user.id)
     }
 }

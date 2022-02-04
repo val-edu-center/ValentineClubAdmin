@@ -17,7 +17,7 @@ export default function roleReducer(state = initialState.roles, action) {
 }
 
 function removeUserFromMap(state, roleName, user) {
-    const newEntries = state.toMap.entries().filter(entry => entry[0] !== user.objectId || entry[1] !== roleName)
+    const newEntries = state.toMap.entries().filter(entry => entry[0] !== user.id || entry[1] !== roleName)
     return buildNewMap(newEntries)
 }
 

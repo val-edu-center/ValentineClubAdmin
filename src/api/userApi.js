@@ -47,8 +47,7 @@ export const getUsersParse = async () => {
 }
 
 export const saveUserParse = async (user) => {
-  console.log(user)
-  await user.save()
+  await user.parseObject.save()
 }
 
 export function deleteUser(userId) {

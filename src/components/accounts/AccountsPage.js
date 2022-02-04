@@ -34,13 +34,13 @@ class AccountsPage extends React.Component {
         }
     }
 
-    handleSaveUser = user => {
+    handleSubmitUser = user => {
         console.log(this.props.allRoles.map(r => r.id))
         toast.success("User updated")
         this.props.actions.users.saveUser(user).catch(
             error => toast.error('Update failed. ' + error.message, { autoClose: false })
         )
-        const newRoleName = roleMapper.getGroupRole(user.get("roles"))
+        const newRoleName = roleMapper.getGroupRole(user.roles)
         const oldRoleName = roleMapper.getGroupRole(this.props.usersToRoles.get(user.id))
         if (newRoleName !== oldRoleName) {
             const newRole = this.props.allRoles.find(role => role.getName() === newRoleName)
@@ -53,7 +53,7 @@ class AccountsPage extends React.Component {
             )
         }
         if (user.createBankAccount) {
-            this.props.actions.bankAccounts.createBankAccount(user.getUsername()).catch(
+            this.props.actions.bankAccounts.createBankAccount(user.username).catch(
                 error => toast.error('Bank account creation failed. ' + error.message, { autoClose: false })
             )
         }
@@ -132,7 +132,7 @@ class AccountsPage extends React.Component {
                 {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
                 <h2>Accounts</h2>
                 {this.props.loading ? (<Spinner />) : (
-                    <AccountList bankAccounts={this.props.bankAccounts} session={this.props.session} users={this.props.users} onDeleteClick={this.handleDeleteUser} onGroupRoleChange={this.handleGroupeRoleChange} onIsApprovedChange={this.handleIsApprovedChange} onSubmitClick={this.handleSaveUser} onCreateBankAccountChange={this.handleCreateBankAccountChange}></AccountList>)
+                    <AccountList bankAccounts={this.props.bankAccounts} session={this.props.session} users={this.props.users} onDeleteClick={this.handleDeleteUser} onGroupRoleChange={this.handleGroupeRoleChange} onIsApprovedChange={this.handleIsApprovedChange} onSubmitClick={this.handleSubmitUser} onCreateBankAccountChange={this.handleCreateBankAccountChange}></AccountList>)
                 }
             </>
         )
