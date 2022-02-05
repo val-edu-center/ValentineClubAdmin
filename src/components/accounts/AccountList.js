@@ -4,7 +4,7 @@ import * as roleMapper from "../../utility/RoleMapper"
 
 
 function getTime(time) {
-    return time.toString()
+    return time.toDateString()
 }
 
 function isDeletable(user, sessionRoles) {

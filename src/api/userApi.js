@@ -44,7 +44,7 @@ export const getUsersParse = async () => {
   const query = new Parse.Query(User)
   
   const results = await query.find()
-  return results
+  return results.map(user => userMapper.mapUserParse(user))
 }
 
 export const saveUserParse = async (user) => {

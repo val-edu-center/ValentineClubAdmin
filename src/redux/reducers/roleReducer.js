@@ -7,7 +7,7 @@ export default function roleReducer(state = initialState.roles, action) {
         case LOAD_ALL_ROLES_SUCCESS:
             return { ...state, all: action.allRoles }
         case LOAD_USERS_FOR_ROLE:
-            return { ...state, userToRoles: addUsersToRolesMap(state, action.role.get('name'), action.users) }
+            return { ...state, userToRoles: addUsers(state, action.role.get('name'), action.users) }
         case CHANGE_GROUP_ROLE_SUCCESS:
             return {...state, userToRoles: changeGroupRole(state, action.role.get('name'), action.user)}
         
@@ -19,10 +19,12 @@ export default function roleReducer(state = initialState.roles, action) {
 function changeGroupRole(state, newGroupRole, targetUser) {
     const newMap = new Map()
 
+    console.log(state.userToRoles)
     state.userToRoles.forEach((user, roles) => {
         if(user.id === targetUser.id) {
             const oldGroupRole = roleMapper.getGroupRole(targetUser.roles)
             const newRoles = roles.filter(role => role !== oldGroupRole) + newGroupRole
+            console.log(newRoles)
             newMap.set(user, newRoles)
         } else {
             newMap.set(user, roles)
@@ -32,7 +34,7 @@ function changeGroupRole(state, newGroupRole, targetUser) {
 
 }
 
-function addUsersToRolesMap(state, roleName, users) {
+function addUsers(state, roleName, users) {
     const newUsers = users.map(user => [user.id, roleName])
     const existingUsers = Array.from(state.userToRoles.entries())
     return buildNewMap(newUsers.concat(existingUsers))
@@ -41,6 +43,7 @@ function addUsersToRolesMap(state, roleName, users) {
 
 function buildNewMap(entries) {
     const newMap = new Map()
+    console.log(entries)
 
     entries.map(entry => {
         const user = entry[0]

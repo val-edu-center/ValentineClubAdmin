@@ -34,8 +34,8 @@ export function loadUsersForRole(role) {
         dispatch(beginApiCall)
         return roleApi
         .getUsersForRole(role)
-        .then(response => {
-            dispatch(loadUsersForRoleSuccess(role, response));
+        .then(users => {
+            dispatch(loadUsersForRoleSuccess(role, users));
         })
         .catch (error => {
             dispatch(apiCallError())
