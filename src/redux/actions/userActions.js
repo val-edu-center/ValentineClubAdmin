@@ -38,10 +38,9 @@ export function saveUser(user) {
         dispatch(beginApiCall())
         return userApi
         .saveUserParse(user)
-        .then(updatedAt => {
-            console.log(updatedAt)
-            if (user.id) {
-                dispatch(updateUserSuccess(user))
+        .then(userResponse => { 
+            if (userResponse.id) {
+                dispatch(updateUserSuccess(userResponse))
             } else {
                 dispatch(createUserSuccess())
             }

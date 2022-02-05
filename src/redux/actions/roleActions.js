@@ -1,6 +1,6 @@
 import * as roleApi from "../../api/roleApi"
 import { beginApiCall, apiCallError } from "./apiStatusActions"
-import { ADD_USER_SUCCESS, LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE, REMOVE_USER_SUCESSS } from "./actionTypes"
+import { CHANGE_GROUP_ROLE_SUCCESS, LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE} from "./actionTypes"
 
 export function loadAllRolesSuccess(allRoles) {
     return {type: LOAD_ALL_ROLES_SUCCESS, allRoles}
@@ -10,11 +10,8 @@ export function loadUsersForRoleSuccess(role, users) {
     return {type: LOAD_USERS_FOR_ROLE, role, users}
 }
 
-export function addUserSuccess(role, user) {
-    return {type: ADD_USER_SUCCESS, role, user}
-}
-export function removeUserSuccess(role, user) {
-    return {type: REMOVE_USER_SUCESSS, role, user}
+export function changeGroupRoleSucces(role, user) {
+    return {type: CHANGE_GROUP_ROLE_SUCCESS, role, user}
 }
 
 export function loadAllRoles() {
@@ -32,7 +29,6 @@ export function loadAllRoles() {
         })
     }
 }
-
 export function loadUsersForRole(role) {
     return function (dispatch) {
         dispatch(beginApiCall)
@@ -47,30 +43,23 @@ export function loadUsersForRole(role) {
         })
     }
 }
-
-export function addUser(role, user) {
+export function changeGroupRole(user, newRole, oldRole) {
     return function (dispatch) {
         return roleApi
-        .addUser(role, user)
+        .addUser(newRole, user)
         .then(() => {
-            dispatch(addUserSuccess(role, user))
+            if (oldRole !== null) {
+                roleApi.removeUser(oldRole, user)
+                .then(() => {
+                    dispatch(changeGroupRoleSucces(newRole, user))
+                })
+                .catch (error => {
+                    dispatch(apiCallError())
+                    throw error
+                })
+            }
         })
         .catch (error => {
-            dispatch(apiCallError())
-            throw error
-        })
-    }
-}
-
-export function removeUser(role, user) {
-    return function (dispatch) {
-        return roleApi
-        .removeUser(role, user)
-        .then(() => {
-            dispatch(removeUserSuccess(role, user))
-        })
-        .catch (error => {
-            console.log(error)
             dispatch(apiCallError())
             throw error
         })

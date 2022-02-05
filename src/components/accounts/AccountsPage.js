@@ -35,21 +35,24 @@ class AccountsPage extends React.Component {
     }
 
     handleSubmitUser = user => {
-        console.log(this.props.allRoles.map(r => r.id))
         toast.success("User updated")
         this.props.actions.users.saveUser(user).catch(
             error => toast.error('Update failed. ' + error.message, { autoClose: false })
         )
         const newRoleName = roleMapper.getGroupRole(user.roles)
-        const oldRoleName = roleMapper.getGroupRole(this.props.usersToRoles.get(user.id))
+        var oldRoleName = null
+        if (this.props.usersToRoles.has(user.id)) {
+            oldRoleName = roleMapper.getGroupRole(this.props.usersToRoles.get(user.id))
+        }
+
         if (newRoleName !== oldRoleName) {
             const newRole = this.props.allRoles.find(role => role.getName() === newRoleName)
-            const oldRole = this.props.allRoles.find(role => role.getName() === oldRoleName)
-            this.props.actions.roles.removeUser(oldRole, user).catch(
-                error => toast.error('Role removal failed. ' + error.message, { autoClose: false })
-            )
-            this.props.actions.roles.addUser(newRole, user).catch(
-                error => toast.error('Role addition failed. ' + error.message, { autoClose: false })
+            var oldRole = null
+            if (oldRoleName !== null) {
+                oldRole = this.props.allRoles.find(role => role.getName() === oldRoleName)
+            }
+            this.props.actions.roles.changeGroupRole(user, newRole, oldRole).catch(
+                error => toast.error('Role change failed. ' + error.message, { autoClose: false })
             )
         }
         if (user.createBankAccount) {
@@ -57,6 +60,7 @@ class AccountsPage extends React.Component {
                 error => toast.error('Bank account creation failed. ' + error.message, { autoClose: false })
             )
         }
+        // TODO if is not approved, remove roles
         // let myObject = {
         //     "ircEvent": "PRIVMSG",
         //     "method": "newURI",
@@ -75,20 +79,26 @@ class AccountsPage extends React.Component {
             error => toast.error('Delete failed. ' + error.message, { autoClose: false })
         )
         this.props.actions.bankAccounts
+        //TODO delete bank account... maybe
     }
 
     flipIsApproved = user => {
+        const oldParseObject = user.parseObject
+        oldParseObject.set("isApproved",!user.isApproved)
         return {
             ...user,
-            isApproved: !user.isApproved
+            isApproved: !user.isApproved,
+            parseObject: oldParseObject
         }
     }
 
     changeGroupRole = (user, newGroupRole) => {
-        //TODO Add logic to keep old non-group roles
+        const oldParseObject = user.parseObject
+        oldParseObject.set("roles",[newGroupRole])
         return {
             ...user,
-            roles: [newGroupRole]
+            roles: [newGroupRole],
+            parseObject: oldParseObject
         }
     }
 
@@ -153,7 +163,7 @@ AccountsPage.propTypes = {
 function mapStateToProps(state) {
     return {
         allRoles: state.roles.all,
-        usersToRoles: state.roles.toMap,
+        usersToRoles: state.roles.userToRoles,
         bankAccounts: state.bankAccounts,
         users: state.users,
         session: state.session,

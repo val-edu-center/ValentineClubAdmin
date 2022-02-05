@@ -34,10 +34,14 @@ export const getUsersForRole = async (role) => {
 }
 
 export const removeUser = async (role, user) => {
-    console.log({role,user})
-    role.getUsers().remove(user)
+    var userQuery = new Parse.User()
+    userQuery.id = user.id
+    role.getUsers().remove(userQuery)
+    await role.save()
 }
 export const addUser = async (role, user) => {
-    console.log({role,user})
-    role.getUsers().add(user)
+    var userQuery = new Parse.User()
+    userQuery.id = user.id
+    role.getUsers().add(userQuery)
+    await role.save()
 }

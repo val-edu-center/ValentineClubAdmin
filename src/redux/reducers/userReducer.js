@@ -1,5 +1,7 @@
 import { CREATE_USER_SUCCESS, UPDATE_USER_SUCCESS, LOAD_USERS_SUCCESS, DELETE_USER_OPTIMISTIC } from "../actions/actionTypes"
 import initialState from './initialState'
+import User from '../../model/User'
+import * as userMapper from '../../utility/UserMapper'
 
 export default function userReducer(state = initialState.users, action) {
     switch(action.type) {
@@ -10,7 +12,7 @@ export default function userReducer(state = initialState.users, action) {
                 user => user.id === action.user.id ? action.user : user 
             )
         case LOAD_USERS_SUCCESS:
-            return action.users.map(user => mapUserParse(user))
+            return action.users.map(user => userMapper.mapUserParse(user))
         case DELETE_USER_OPTIMISTIC:
             return state.filter (user => user.id !== action.user.id)
         default:
@@ -21,15 +23,4 @@ export default function userReducer(state = initialState.users, action) {
 
 function createUser() {
     return {user: new User, parseObject: null}
-}
-
-function mapUserParse(parseUser) {
-    const user = new User
-    user.createdAt = parseUser.createdAt
-    user.id = parseUser.id
-    user.username = parseUser.getUsername()
-    user.roles = parseUser.get("roles")
-    user.isApproved = parseUser.get("isApproved")
-    user.parseObject = parseUser
-    return user
 }

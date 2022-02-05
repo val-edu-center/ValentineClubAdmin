@@ -1,5 +1,5 @@
 export default {
-    roles: {all:[], toMap:new Map()},
+    roles: {all:[], userToRoles:new Map()},
     users: [],
     bankAccounts: [],
     session: {roles:{}},

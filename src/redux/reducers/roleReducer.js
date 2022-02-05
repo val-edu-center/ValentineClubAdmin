@@ -1,47 +1,62 @@
-import { ADD_USER_SUCCESS, LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE, REMOVE_USER_SUCESSS } from "../actions/actionTypes"
+import { LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE, CHANGE_GROUP_ROLE_SUCCESS } from "../actions/actionTypes"
 import initialState from "./initialState"
+import * as roleMapper from "../../utility/RoleMapper"
 
 export default function roleReducer(state = initialState.roles, action) {
     switch (action.type) {
         case LOAD_ALL_ROLES_SUCCESS:
             return { ...state, all: action.allRoles }
         case LOAD_USERS_FOR_ROLE:
-            return { ...state, toMap: getUsersToRolesMap(state, action.role.get('name'), action.users) }
-        case ADD_USER_SUCCESS:
-            return { ...state, toMap: getUsersToRolesMap(state, action.role.get('name'), [action.user]) }
-        case REMOVE_USER_SUCESSS:
-            return { ...state, toMap: removeUserFromMap(state, action.role.get('name'), action.user) }
+            return { ...state, userToRoles: addUsersToRolesMap(state, action.role.get('name'), action.users) }
+        case CHANGE_GROUP_ROLE_SUCCESS:
+            return {...state, userToRoles: changeGroupRole(state, action.role.get('name'), action.user)}
+        
         default:
             return state
     }
 }
 
-function removeUserFromMap(state, roleName, user) {
-    const newEntries = state.toMap.entries().filter(entry => entry[0] !== user.id || entry[1] !== roleName)
-    return buildNewMap(newEntries)
+function changeGroupRole(state, newGroupRole, targetUser) {
+    const newMap = new Map()
+
+    state.userToRoles.forEach((user, roles) => {
+        if(user.id === targetUser.id) {
+            const oldGroupRole = roleMapper.getGroupRole(targetUser.roles)
+            const newRoles = roles.filter(role => role !== oldGroupRole) + newGroupRole
+            newMap.set(user, newRoles)
+        } else {
+            newMap.set(user, roles)
+        }
+    })
+    return newMap
+
 }
 
-function getUsersToRolesMap(state, roleName, users) {
+function addUsersToRolesMap(state, roleName, users) {
     const newUsers = users.map(user => [user.id, roleName])
-    const oldMap = state.toMap
-    const newEntries = [...oldMap.entries(), ...newUsers]
-    return buildNewMap(newEntries)
+    const existingUsers = Array.from(state.userToRoles.entries())
+    return buildNewMap(newUsers.concat(existingUsers))
+
 }
 
-function buildNewMap(newEntries) {
-    return newEntries.reduce(function (map, obj) {
-        const user = obj[0]
-        const newRole = obj[1]
-        const oldRoles = map.get(user)
-        if (oldRoles) {
-            map.set(user, [...oldRoles, newRole])
-        } else if (Array.isArray(newRole)) {
-            map.set(user, newRole)
+function buildNewMap(entries) {
+    const newMap = new Map()
+
+    entries.map(entry => {
+        const user = entry[0]
+        const roles = entry[1]
+        const existingRoles = newMap.get(user)
+        if (existingRoles) {
+            newMap.set(user, [...existingRoles, roles])
+        } else if (Array.isArray(roles)) {
+            newMap.set(user, roles)
         }
         else {
-            map.set(user, [newRole])
+            newMap.set(user, [roles])
         }
-        return map;
-    }, new Map())
+        return newMap;
+    })
+
+    return newMap
 
 }

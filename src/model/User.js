@@ -5,5 +5,8 @@ class User {
     id = ""
     username = ""
     isApproved = false
+    groupRole = null
     createBankAccount = false
 }
+
+export default User

@@ -1,5 +1,6 @@
 import { handleResponse, handleError, loadFromLocalStorage } from "./apiUtils";
 import Parse from 'parse/dist/parse.min.js'
+import * as userMapper from '../utility/UserMapper'
 const baseUrl = process.env.BACK4APP_API_URL + "/users/";
 const appId = process.env.BACK4APP_APP_ID;
 const restApiKey = process.env.BACK4APP_REST_API_KEY;
@@ -48,6 +49,7 @@ export const getUsersParse = async () => {
 
 export const saveUserParse = async (user) => {
   await user.parseObject.save()
+  return userMapper.mapUserParse(user.parseObject)
 }
 
 export function deleteUser(userId) {
