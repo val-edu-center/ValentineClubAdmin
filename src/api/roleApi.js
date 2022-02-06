@@ -1,5 +1,6 @@
 import { handleResponse, handleError, loadFromLocalStorage } from "./apiUtils"
 import Parse from 'parse/dist/parse.min.js'
+import { CLUB_ROLE, DIRECTOR_ROLE, STAFF_ROLE } from '../utility/RoleMapper'
 
 const baseUrl = process.env.BACK4APP_API_URL + "/roles/"
 const appId = process.env.BACK4APP_APP_ID
@@ -44,4 +45,17 @@ export const addUser = async (role, user) => {
     userQuery.id = user.id
     role.getUsers().add(userQuery)
     await role.save()
+}
+export const changeGroupRole = async (roleName, user) => {
+    const userACL = new Parse.ACL()
+
+    userACL.setRoleReadAccess(roleName, true)
+    userACL.setRoleReadAccess(STAFF_ROLE, true)
+    userACL.setRoleReadAccess(DIRECTOR_ROLE, true)
+    userACL.setRoleReadAccess(CLUB_ROLE, true)
+
+    userACL.setRoleWriteAccess(DIRECTOR_ROLE, true)
+    userACL.setRoleWriteAccess(STAFF_ROLE, true)
+
+    await user.parseObject.setACL(userACL).save(null, { useMasterKey: true });
 }
