@@ -9,26 +9,24 @@ export default function roleReducer(state = initialState.roles, action) {
         case LOAD_USERS_FOR_ROLE:
             return { ...state, userToRoles: addUsers(state, action.role.get('name'), action.users) }
         case CHANGE_GROUP_ROLE_SUCCESS:
-            return {...state, userToRoles: changeGroupRole(state, action.role.get('name'), action.user)}
+            return {...state, userToRoles: changeGroupRole(state, action.user, action.newRole.get('name'), action.oldRole.get('name'))}
         
         default:
             return state
     }
 }
 
-function changeGroupRole(state, newGroupRole, targetUser) {
+function changeGroupRole(state, targetUser, newGroupRole, oldGroupRole) {
     const newMap = new Map()
-    console.log(state.userToRoles)
-    state.userToRoles.forEach((user, roles) => {
-        if(user.id === targetUser.id) {
-            const oldGroupRole = roleMapper.getGroupRole(targetUser.roles)
-            const newRoles = roles.filter(role => role !== oldGroupRole) + newGroupRole
-            newMap.set(user, newRoles)
+    state.userToRoles.forEach((roles, userId) => {
+        if(userId === targetUser.id) {
+            const newRoles = roles.filter(role => role !== oldGroupRole)
+            newRoles.push(newGroupRole)
+            newMap.set(userId, newRoles)
         } else {
-            newMap.set(user, roles)
+            newMap.set(userId, roles)
         }
     })
-    console.log(newMap)
     return newMap
 
 }
@@ -43,21 +41,21 @@ function addUsers(state, roleName, users) {
 function buildNewMap(entries) {
     const newMap = new Map()
     entries.map(entry => {
-        const user = entry[0]
+        const userId = entry[0]
         const roles = entry[1]
-        const existingRoles = newMap.get(user)
+        const existingRoles = newMap.get(userId)
 
         if (Array.isArray(roles)) {
             if (existingRoles) {
-                newMap.set(user, [...existingRoles, ...roles])
+                newMap.set(userId, [...existingRoles, ...roles])
             } else {
-                newMap.set(user, roles)
+                newMap.set(userId, roles)
             }
         } else {
             if (existingRoles) {
-                newMap.set(user, [...existingRoles, roles])
+                newMap.set(userId, [...existingRoles, roles])
             } else {
-                newMap.set(user, [roles])
+                newMap.set(userId, [roles])
             }
         }
 

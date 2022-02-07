@@ -10,8 +10,8 @@ export function loadUsersForRoleSuccess(role, users) {
     return { type: LOAD_USERS_FOR_ROLE, role, users }
 }
 
-export function changeGroupRoleSucces(role, user) {
-    return { type: CHANGE_GROUP_ROLE_SUCCESS, role, user }
+export function changeGroupRoleSucces(user, newRole, oldRole) {
+    return { type: CHANGE_GROUP_ROLE_SUCCESS, oldRole, newRole, user }
 }
 
 export function loadAllRoles() {
@@ -44,7 +44,6 @@ export function loadUsersForRole(role) {
     }
 }
 export function changeGroupRole(user, newRole, oldRole) {
-    console.log({user, newRole, oldRole})
     return function (dispatch) {
         return roleApi
             .changeGroupRole(newRole, user)
@@ -55,7 +54,7 @@ export function changeGroupRole(user, newRole, oldRole) {
                         if (oldRole !== null) {
                             roleApi.removeUser(oldRole, user)
                                 .then(() => {
-                                    dispatch(changeGroupRoleSucces(newRole, user))
+                                    dispatch(changeGroupRoleSucces(user, newRole, oldRole))
                                 })
                                 .catch(error => {
                                     dispatch(apiCallError())

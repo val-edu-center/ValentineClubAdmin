@@ -44,6 +44,7 @@ export function saveUser(user) {
             } else {
                 dispatch(createUserSuccess())
             }
+            return updatedUser
         }).catch (error => {
             dispatch(apiCallError())
             throw error

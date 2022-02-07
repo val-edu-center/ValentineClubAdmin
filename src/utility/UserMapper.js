@@ -4,12 +4,13 @@ import * as roleMapper from './RoleMapper'
 
 export function mapUserParse(parseUser) {
     const user = new User
+    const roles = parseUser.get("roles")
     user.createdAt = parseUser.createdAt
     user.id = parseUser.id
     user.username = parseUser.getUsername()
-    user.roles = parseUser.get("roles")
+    user.roles = roles
     user.isApproved = parseUser.get("isApproved")
     user.parseObject = parseUser
-    user.groupRole = roleMapper.getGroupRole(parseUser.get("roles"))
+    user.groupRole = roleMapper.getGroupRole(roles)
     return user
 }

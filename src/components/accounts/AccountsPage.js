@@ -33,18 +33,14 @@ class AccountsPage extends React.Component {
             })
         }
     }
-
-    handleSubmitUser = user => {
-        toast.success("User updated")
-        this.props.actions.users.saveUser(user).catch(
-            error => toast.error('Update failed. ' + error.message, { autoClose: false })
-        )
+    
+    updateUser = user=> {
         const newRoleName = roleMapper.getGroupRole(user.roles)
         var oldRoleName = null
         if (this.props.usersToRoles.has(user.id)) {
             oldRoleName = roleMapper.getGroupRole(this.props.usersToRoles.get(user.id))
         }
-
+        //TODO incorporate isApproved in role removal
         if (newRoleName !== oldRoleName) {
             const newRole = this.props.allRoles.find(role => role.getName() === newRoleName)
             var oldRole = null
@@ -60,6 +56,18 @@ class AccountsPage extends React.Component {
                 error => toast.error('Bank account creation failed. ' + error.message, { autoClose: false })
             )
         }
+    }
+
+    handleSubmitUser = user => {
+        toast.success("User updated")
+        this.props.actions.users.saveUser(user)
+        .then(
+            u => this.updateUser(u)
+        ) 
+        .catch(
+            error => toast.error('Update failed. ' + error.message, { autoClose: false })
+        )
+        
         // TODO if is not approved, remove roles
         // let myObject = {
         //     "ircEvent": "PRIVMSG",
@@ -72,6 +80,8 @@ class AccountsPage extends React.Component {
         //   console,log(newObj);   // has no 'regex' key
         //   console,log(myObject); // remains unchanged
     }
+
+    
 
     handleDeleteUser = user => {
         toast.success("User deleted")
