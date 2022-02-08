@@ -60,7 +60,6 @@ class AccountsPage extends React.Component {
 
     handleSubmitUser = user => {
         toast.success("User updated")
-        const createBankAccount = user.createBankAccount
         this.props.actions.users.saveUser(user)
         .then(
             u => this.updateUser(u)

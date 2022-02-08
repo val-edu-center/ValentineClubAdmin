@@ -1,6 +1,5 @@
 import { LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE, CHANGE_GROUP_ROLE_SUCCESS } from "../actions/actionTypes"
 import initialState from "./initialState"
-import * as roleMapper from "../../utility/RoleMapper"
 
 export default function roleReducer(state = initialState.roles, action) {
     switch (action.type) {
