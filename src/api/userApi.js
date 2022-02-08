@@ -49,7 +49,9 @@ export const getUsersParse = async () => {
 
 export const saveUserParse = async (user) => {
   await user.parseObject.save()
-  return userMapper.mapUserParse(user.parseObject)
+  const newUser = userMapper.mapUserParse(user.parseObject)
+  newUser.createBankAccount = user.createBankAccount
+  return newUser
 }
 
 export function deleteUser(userId) {

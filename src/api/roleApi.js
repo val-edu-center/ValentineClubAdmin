@@ -49,11 +49,13 @@ export const addUser = async (role, user) => {
 export const changeGroupRole = async (roleName, user) => {
     const userACL = new Parse.ACL()
 
+    userACL.setReadAccess(user.id, true)
     userACL.setRoleReadAccess(roleName, true)
     userACL.setRoleReadAccess(STAFF_ROLE, true)
     userACL.setRoleReadAccess(DIRECTOR_ROLE, true)
     userACL.setRoleReadAccess(CLUB_ROLE, true)
 
+    userACL.setWriteAccess(user.id, true)
     userACL.setRoleWriteAccess(DIRECTOR_ROLE, true)
     userACL.setRoleWriteAccess(STAFF_ROLE, true)
 
