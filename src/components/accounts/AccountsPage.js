@@ -62,7 +62,7 @@ class AccountsPage extends React.Component {
         toast.success("User updated")
         this.props.actions.users.saveUser(user)
         .then(
-            u => this.updateUser(u)
+            updatedUser => this.updateUser(updatedUser)
         ) 
         .catch(
             error => toast.error('Update failed. ' + error.message, { autoClose: false })
