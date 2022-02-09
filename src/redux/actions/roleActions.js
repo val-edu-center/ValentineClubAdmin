@@ -43,6 +43,7 @@ export function loadUsersForRole(role) {
             })
     }
 }
+//TODO organize this
 export function changeGroupRole(user, newRole, oldRole) {
     return function (dispatch) {
         return roleApi

@@ -13,7 +13,7 @@ import UnauthorizedPage from './common/UnauthorizedPage'
 import LogoutPage from './logout/LogoutPage'
 import Parse from 'parse/dist/parse.min.js'
 
-// Your Parse initialization configuration goes here
+//TODO Add secure configs for this
 const PARSE_APPLICATION_ID = 'pen8j01Zc3JaqVkHmMCbZud1AhOaOMeBYTpzlUhw'
 const PARSE_HOST_URL = 'https://parseapi.back4app.com/'
 const PARSE_JAVASCRIPT_KEY = 'RJQoYRy9K5rQCB9J5YxEnp1ygWvXefCJIqJkJNn3'
