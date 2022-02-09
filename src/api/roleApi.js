@@ -47,6 +47,7 @@ export const addUser = async (role, user) => {
     await role.save()
 }
 export const changeGroupRole = async (roleName, user) => {
+    //TODO to add retain multiple roles
     const userACL = new Parse.ACL()
 
     userACL.setReadAccess(user.id, true)
