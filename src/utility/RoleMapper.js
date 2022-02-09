@@ -1,12 +1,13 @@
 import Roles from "../model/Roles"
 
+export const STAFF_ROLE = 'Staff'
+export const DIRECTOR_ROLE = 'Director'
+export const CLUB_ROLE = 'Club'
 const CADET_ROLE = 'Cadet'
 const PREP_ROLE = 'Prep'
 const JUNIOR_ROLE = 'Junior'
 const INTERMEDIATE_ROLE = 'Intermediate'
 const TEEN_ROLE = 'Teen'
-const STAFF_ROLE = 'Staff'
-const DIRECTOR_ROLE = 'Director'
 const BANKER_ROLE = 'Banker'
 const DESIGNER_ROLE = '3D Designer'
 const PRINTER_ROLE = '3D Printer'

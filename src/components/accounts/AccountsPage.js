@@ -9,38 +9,66 @@ import { Redirect } from 'react-router-dom'
 import Spinner from "../common/Spinner"
 import { toast } from "react-toastify"
 import * as roleActions from "../../redux/actions/roleActions"
+import * as roleMapper from "../../utility/RoleMapper"
 
 class AccountsPage extends React.Component {
     componentDidMount() {
-        const { users, actions, bankAccounts, session, allRoles } = this.props
+        const { users, actions, bankAccounts, session, allRoles} = this.props
         const isAdmin = session.roles.isStaff || session.roles.isDirector
-        if (users.length == 0 && session.sessionToken) {
+        if (users.length === 0 && session.sessionToken) {
             actions.users.loadUsers().catch(error => {
                 alert("Loading users failed " + error)
             })
         }
-        if (bankAccounts.length == 0 && session.sessionToken && session.roles.isBanker) {
+        if (bankAccounts.length === 0 && session.sessionToken && session.roles.isBanker) {
             actions.bankAccounts.loadBankAccounts().catch(error => {
                 alert("Loading accounts failed " + error)
             })
         }
-        // if (isAdmin && allRoles.length == 0) {
-        //     actions.roles.loadAllRoles().catch(error => {
-        //         alert("Loading roles failed " + error)
-        //     })
-        // }
+        if (isAdmin && allRoles.length === 0) {
+            actions.roles.loadAllRoles()
+            .then(roles => roles.map(r => actions.roles.loadUsersForRole(r)))
+            .catch(error => {
+                alert("Loading roles failed " + error)
+            })
+        }
     }
-
-    handleSaveUser = user => {
-        toast.success("User updated")
-        this.props.actions.users.saveUser(user).catch(
-            error => toast.error('Update failed. ' + error.message, { autoClose: false })
-        )
+    
+    updateUser = user=> {
+        const newRoleName = roleMapper.getGroupRole(user.roles)
+        var oldRoleName = null
+        if (this.props.usersToRoles.has(user.id)) {
+            oldRoleName = roleMapper.getGroupRole(this.props.usersToRoles.get(user.id))
+        }
+        //TODO incorporate isApproved in role removal
+        if (newRoleName !== oldRoleName) {
+            const newRole = this.props.allRoles.find(role => role.getName() === newRoleName)
+            var oldRole = null
+            if (oldRoleName !== null) {
+                oldRole = this.props.allRoles.find(role => role.getName() === oldRoleName)
+            }
+            this.props.actions.roles.changeGroupRole(user, newRole, oldRole).catch(
+                error => toast.error('Role change failed. ' + error.message, { autoClose: false })
+            )
+        }
         if (user.createBankAccount) {
             this.props.actions.bankAccounts.createBankAccount(user.username).catch(
                 error => toast.error('Bank account creation failed. ' + error.message, { autoClose: false })
             )
         }
+    }
+
+    handleSubmitUser = user => {
+        toast.success("User updated")
+        this.props.actions.users.saveUser(user)
+        .then(
+            updatedUser => this.updateUser(updatedUser)
+        ) 
+        .catch(
+            error => toast.error('Update failed. ' + error.message, { autoClose: false })
+        )
+        
+        // TODO if is not approved, remove roles
         // let myObject = {
         //     "ircEvent": "PRIVMSG",
         //     "method": "newURI",
@@ -53,26 +81,34 @@ class AccountsPage extends React.Component {
         //   console,log(myObject); // remains unchanged
     }
 
+    
+
     handleDeleteUser = user => {
         toast.success("User deleted")
         this.props.actions.users.deleteUser(user).catch(
             error => toast.error('Delete failed. ' + error.message, { autoClose: false })
         )
         this.props.actions.bankAccounts
+        //TODO delete bank account... maybe
     }
 
     flipIsApproved = user => {
+        const oldParseObject = user.parseObject
+        oldParseObject.set("isApproved",!user.isApproved)
         return {
             ...user,
-            isApproved: !user.isApproved
+            isApproved: !user.isApproved,
+            parseObject: oldParseObject
         }
     }
 
     changeGroupRole = (user, newGroupRole) => {
-        //TODO Add logic to keep old non-group roles
+        const oldParseObject = user.parseObject
+        oldParseObject.set("roles",[newGroupRole])
         return {
             ...user,
-            roles: [newGroupRole]
+            roles: [newGroupRole],
+            parseObject: oldParseObject
         }
     }
 
@@ -93,19 +129,19 @@ class AccountsPage extends React.Component {
     handleGroupeRoleChange = event => {
         const objectId = event.target.id
         const newRole = event.target.value
-        const newUser = this.changeGroupRole(this.props.users.find(user => user.objectId === objectId), newRole)
+        const newUser = this.changeGroupRole(this.props.users.find(user => user.id === objectId), newRole)
         this.props.actions.users.updateUser(newUser)
     }
 
     handleIsApprovedChange = event => { 
         const objectId = event.target.id
-        const newUser = this.flipIsApproved(this.props.users.find(user => user.objectId === objectId))
+        const newUser = this.flipIsApproved(this.props.users.find(user => user.id === objectId))
         this.props.actions.users.updateUser(newUser)
     }
 
     handleCreateBankAccountChange = event => {
         const objectId = event.target.id
-        const newUser = this.flipCreateBankAccount(this.props.users.find(user => user.objectId === objectId))
+        const newUser = this.flipCreateBankAccount(this.props.users.find(user => user.id === objectId))
         this.props.actions.users.updateUser(newUser)
     }
 
@@ -116,7 +152,7 @@ class AccountsPage extends React.Component {
                 {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
                 <h2>Accounts</h2>
                 {this.props.loading ? (<Spinner />) : (
-                    <AccountList bankAccounts={this.props.bankAccounts} session={this.props.session} users={this.props.users} onDeleteClick={this.handleDeleteUser} onGroupRoleChange={this.handleGroupeRoleChange} onIsApprovedChange={this.handleIsApprovedChange} onSubmitClick={this.handleSaveUser} onCreateBankAccountChange={this.handleCreateBankAccountChange}></AccountList>)
+                    <AccountList bankAccounts={this.props.bankAccounts} session={this.props.session} users={this.props.users} onDeleteClick={this.handleDeleteUser} onGroupRoleChange={this.handleGroupeRoleChange} onIsApprovedChange={this.handleIsApprovedChange} onSubmitClick={this.handleSubmitUser} onCreateBankAccountChange={this.handleCreateBankAccountChange}></AccountList>)
                 }
             </>
         )
@@ -129,13 +165,15 @@ AccountsPage.propTypes = {
     bankAccounts: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
-    allRoles: PropTypes.array.isRequired
+    allRoles: PropTypes.array.isRequired,
+    usersToRoles: PropTypes.object.isRequired
 }
 
 //ownProps not need, so it is removed
 function mapStateToProps(state) {
     return {
-        allRoles: state.allRoles,
+        allRoles: state.roles.all,
+        usersToRoles: state.roles.userToRoles,
         bankAccounts: state.bankAccounts,
         users: state.users,
         session: state.session,

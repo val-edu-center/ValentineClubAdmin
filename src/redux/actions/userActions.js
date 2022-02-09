@@ -2,8 +2,8 @@ import { CREATE_USER_SUCCESS, UPDATE_USER_SUCCESS, LOAD_USERS_SUCCESS, DELETE_US
 import * as userApi from "../../api/userApi"
 import { apiCallError, beginApiCall } from "./apiStatusActions";
 
-export function createUserSuccess(user) {
-    return { type: CREATE_USER_SUCCESS, user}
+export function createUserSuccess() {
+    return { type: CREATE_USER_SUCCESS}
 }
 
 export function updateUserSuccess(user) {
@@ -22,9 +22,9 @@ export function loadUsers() {
     return function (dispatch) {
         dispatch(beginApiCall)
         return userApi
-        .getUsers()
-        .then(response => {
-            dispatch(loadUsersSuccess(response.results));
+        .getUsersParse()
+        .then(users => {
+            dispatch(loadUsersSuccess(users));
         })
         .catch (error => {
             dispatch(apiCallError())
@@ -37,13 +37,14 @@ export function saveUser(user) {
     return function (dispatch) {
         dispatch(beginApiCall())
         return userApi
-        .saveUser(user)
-        .then(updatedAt => {
-            if (user.objectId) {
-                dispatch(updateUserSuccess({...user, updatedAt}))
+        .saveUserParse(user)
+        .then(updatedUser => { 
+            if (updatedUser.id) {
+                dispatch(updateUserSuccess(updatedUser))
             } else {
-                dispatch(createUserSuccess(updatedAt))
+                dispatch(createUserSuccess())
             }
+            return updatedUser
         }).catch (error => {
             dispatch(apiCallError())
             throw error
@@ -60,6 +61,6 @@ export function updateUser(user) {
 export function deleteUser(user) {
     return function (dispatch) {
         dispatch(deleteUserOptimistic(user))
-        return userApi.deleteUser(user.objectId)
+        return userApi.deleteUser(user.id)
     }
 }

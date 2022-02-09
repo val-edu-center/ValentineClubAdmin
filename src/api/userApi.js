@@ -1,4 +1,6 @@
 import { handleResponse, handleError, loadFromLocalStorage } from "./apiUtils";
+import Parse from 'parse/dist/parse.min.js'
+import * as userMapper from '../utility/UserMapper'
 const baseUrl = process.env.BACK4APP_API_URL + "/users/";
 const appId = process.env.BACK4APP_APP_ID;
 const restApiKey = process.env.BACK4APP_REST_API_KEY;
@@ -35,6 +37,21 @@ export function saveUser(rawUser) {
   })
     .then(handleResponse)
     .catch(handleError);
+}
+
+export const getUsersParse = async () => {
+  const User = new Parse.User()
+  const query = new Parse.Query(User)
+  
+  const results = await query.find()
+  return results.map(user => userMapper.mapUserParse(user))
+}
+
+export const saveUserParse = async (user) => {
+  await user.parseObject.save()
+  const newUser = userMapper.mapUserParse(user.parseObject)
+  newUser.createBankAccount = user.createBankAccount
+  return newUser
 }
 
 export function deleteUser(userId) {

@@ -3,10 +3,10 @@ import session from './sessionReducer'
 import users from './userReducer'
 import bankAccounts from './bankAccountReducer'
 import apiCallsInProgress from './apiStatusReducer'
-import allRoles from './roleReducer'
+import roles from './roleReducer'
 
 const rootReducer = combineReducers({
-    session, users, allRoles, bankAccounts, apiCallsInProgress
+    session, users, roles, bankAccounts, apiCallsInProgress
 })
 
 export default rootReducer;

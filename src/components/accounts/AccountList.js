@@ -4,12 +4,13 @@ import * as roleMapper from "../../utility/RoleMapper"
 
 
 function getTime(time) {
-    return time.split("T")[0]
+    return time.toDateString()
 }
 
-function isNotDeletable(user, sessionRoles) {
+function isDeletable(user, sessionRoles) {
     const roles = roleMapper.getRoles(user.roles)
-    return roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
+    const isNotDeletable = roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
+    return !isNotDeletable
 }
 
 const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountChange, onGroupRoleChange, onSubmitClick, session, users, bankAccounts }) => {
@@ -30,9 +31,9 @@ const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountCha
                 </tr>
             </thead>
             <tbody>
-                {users.filter(user => !isNotDeletable(user, session.roles)).map(user => {
+                {users.filter(user => isDeletable(user, session.roles)).map(user => {
                     return (
-                        <tr key={user.objectId}>
+                        <tr key={user.id}>
                             <td>
                                 <p>{user.username}</p>
                             </td>
@@ -41,7 +42,7 @@ const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountCha
                             {isAdmin && <td>{getIsApproved(user, onIsApprovedChange)}</td>}
                             {isBanker &&
                                 <td>
-                                    {getBankAccount(bankAccountMap[user.username], user.objectId, onCreateBankAccountChange)}
+                                    {getBankAccount(bankAccountMap[user.username], user.id, onCreateBankAccountChange)}
                                 </td>
                             }
                             {isAdmin &&
@@ -75,7 +76,7 @@ const getGroupRoleInput = (user, isAdmin, onChange) => {
     const groupRole = roleMapper.getGroupRole(user.roles)
     if (groupRole) {
         if (isAdmin) {
-            return <select name="groups" id={user.objectId} value={groupRole} onChange={onChange}>
+            return <select name="groups" id={user.id} value={groupRole} onChange={onChange}>
                 {
                     roleMapper.roleGroups.map(r => getRoleOption(r))
                 }
@@ -112,7 +113,7 @@ const getRoleOption = role => {
 }
 const getIsApproved = (user, handleChange) => {
     const isApproved = user.isApproved
-    const id = user.objectId
+    const id = user.id
     return <input type="checkbox" id={id} name={id} value={id} defaultChecked={isApproved} onChange={handleChange} />
 }
 AccountList.propTypes = {
