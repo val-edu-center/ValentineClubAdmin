@@ -2,17 +2,6 @@ import React from 'react'
 import PropTypes from "prop-types"
 import * as roleMapper from "../../utility/RoleMapper"
 
-
-function getTime(time) {
-    return time.toDateString()
-}
-
-function isDeletable(user, sessionRoles) {
-    const roles = roleMapper.getRoles(user.roles)
-    const isNotDeletable = roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
-    return !isNotDeletable
-}
-
 const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountChange, onGroupRoleChange, onSubmitClick, session, users, bankAccounts }) => {
     const bankAccountMap = getBankAccountMap(bankAccounts)
     const isAdmin = session.roles.isStaff || session.roles.isDirector
@@ -116,6 +105,17 @@ const getIsApproved = (user, handleChange) => {
     const id = user.id
     return <input type="checkbox" id={id} name={id} value={id} defaultChecked={isApproved} onChange={handleChange} />
 }
+
+function getTime(time) {
+    return time.toDateString()
+}
+
+function isDeletable(user, sessionRoles) {
+    const roles = roleMapper.getRoles(user.roles)
+    const isNotDeletable = roles.isDirector || (roles.isStaff && !sessionRoles.isDirector)
+    return !isNotDeletable
+}
+
 AccountList.propTypes = {
     users: PropTypes.array.isRequired,
     session: PropTypes.object.isRequired,
