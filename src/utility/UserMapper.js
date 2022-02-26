@@ -1,4 +1,3 @@
-
 import User from '../model/User'
 import * as roleMapper from './RoleMapper'
 

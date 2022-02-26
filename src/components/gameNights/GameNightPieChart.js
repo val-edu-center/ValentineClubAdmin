@@ -3,8 +3,19 @@ import Highcharts from 'highcharts/highstock'
 import HighchartsReact from 'highcharts-react-official'
 
 const GameNightPieChart = ({ title, votes }) => {
-    console.log({title, votes})
-    const voteMap = votes.reduce(function(map, vote) {
+    const voteMap = getVoteMap(votes)
+    const data = getData(votes, voteMap)
+    const options = getOptions(title, data)
+    return <div>
+        <HighchartsReact
+            highcharts={Highcharts}
+            options={options}
+        />
+    </div>
+}
+
+const getVoteMap = (votes) => {
+    return votes.reduce(function(map, vote) {
         const existingVotes = map[vote.get("option")]
         if (existingVotes) {
             existingVotes.push(vote.get("username"))
@@ -14,6 +25,9 @@ const GameNightPieChart = ({ title, votes }) => {
         }
         return map
     }, {})
+}
+
+const getData = (votes, voteMap) => {
     const data = []
     const total = votes.length
     for (var key in voteMap){
@@ -21,16 +35,10 @@ const GameNightPieChart = ({ title, votes }) => {
         const y = gameNightVotes.length/total
         data.push({name: key,  y})
     } 
-    const options = getOptions(title, votes, data)
-    return <div>
-        <HighchartsReact
-            highcharts={Highcharts}
-            options={options}
-        />
-    </div>
+    return data
 }
 
-const getOptions = (title, votes, data) => {
+const getOptions = (title, data) => {
     return {
         chart: {
             plotBackgroundColor: null,

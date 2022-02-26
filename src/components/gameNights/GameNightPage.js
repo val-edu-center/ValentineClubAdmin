@@ -7,6 +7,9 @@ import GameNightPieChart from "./GameNightPieChart"
 
 
 class GameNightPage extends React.Component {
+    state = {
+        redirectToAddGameNightPage: false
+    }
     componentDidMount() {
         const { gameNight, session, actions } = this.props
         const isAdmin = session.roles.isStaff || session.roles.isDirector
@@ -23,18 +26,22 @@ class GameNightPage extends React.Component {
     }
 
     render() {
-        console.log(this.props)
         return (
             <>
                 {!this.props.session.sessionToken && <Redirect to="/unauthorized" />}
                 {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
+                {this.state.redirectToAddGameNightPage && <Redirect to="/gamenight/" />}
                 <h2>Game Nights</h2>
+                <button style={{ marginBottom: 20 }} className="btn btn-primary" onClick={ () => this.setState({ redirectToAddGameNightPage: true})}>
+                     Add Game Night
+                 </button>
                 {this.props.gameNight.dates.map(gameNight => {
                     const date = gameNight.get("date")
+                    const dateString = date.toDateString()
                     const votes = this.props.gameNight.votes.filter(
                         vote => isSameGameNightDate(date, new Date(vote.get("gameNightDate")))
                     )
-                    return <GameNightPieChart key={gameNight.id} title={date} votes={votes}></GameNightPieChart>
+                    return <GameNightPieChart key={gameNight.id} title={dateString} votes={votes}></GameNightPieChart>
                 })}
             </>
         )

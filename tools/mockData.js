@@ -1,3 +1,8 @@
+const newGameNight = {
+    id: null,
+    date: null,
+    options: []
+}
 
 const currentUserRole = 'Director'
 
@@ -165,6 +170,7 @@ const newUser = {
 module.exports = {
   newCredentials,
   newUser,
+  newGameNight,
   users,
   login
 };
