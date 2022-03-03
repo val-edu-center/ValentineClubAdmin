@@ -2,13 +2,13 @@ import React from "react";
 import { connect } from 'react-redux'
 import * as userActions from "../../redux/actions/userActions"
 import * as bankAccountActions from "../../redux/actions/bankAccountActions"
+import * as roleActions from "../../redux/actions/roleActions"
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import AccountList from './AccountList'
 import { Redirect } from 'react-router-dom'
 import Spinner from "../common/Spinner"
 import { toast } from "react-toastify"
-import * as roleActions from "../../redux/actions/roleActions"
 import * as roleMapper from "../../utility/RoleMapper"
 
 class AccountsPage extends React.Component {
@@ -80,8 +80,6 @@ class AccountsPage extends React.Component {
         //   console,log(newObj);   // has no 'regex' key
         //   console,log(myObject); // remains unchanged
     }
-
-    
 
     handleDeleteUser = user => {
         toast.success("User deleted")
