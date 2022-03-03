@@ -19,7 +19,6 @@ const CheckboxInput = ({ name, label, values, options, onChange, error }) => {
 
 const buildInput = (name, values, onChange) => {
     return <div key={name}>
-        {}
         <input type="checkbox" name={name} onChange={onChange} checked={values.includes(name)}></input>
         <label htmlFor={name}>{name}</label>
     </div>
