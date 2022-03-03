@@ -14,6 +14,7 @@ import LogoutPage from './logout/LogoutPage'
 import Parse from 'parse/dist/parse.min.js'
 import GameNightPage from './gameNights/GameNightPage'
 import ManageGameNightPage from './gameNights/ManageGameNightPage'
+import ManageAccountPage from './accounts/ManageAccountPage'
 
 //TODO Add secure configs for this
 const PARSE_APPLICATION_ID = 'pen8j01Zc3JaqVkHmMCbZud1AhOaOMeBYTpzlUhw'
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/login" component={LoginPage}></Route>
                 <Route path="/logout" component={LogoutPage}></Route>
                 <Route path="/accounts" component={AccountsPage}></Route>
+                <Route path="/account/" component={ManageAccountPage}></Route>
                 <Route path="/gamenights" component={GameNightPage}></Route>
                 <Route path="/gamenight/" component={ManageGameNightPage}></Route>
                 <Route path="/unauthorized" component={UnauthorizedPage}></Route>
