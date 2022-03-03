@@ -9,19 +9,19 @@ import Spinner from "../common/Spinner";
 import Parse from 'parse/dist/parse.min.js'
 import { toast } from "react-toastify";
 
-const ManageGameNightPage = ({ gameNights, actions, history, ...props }) => {
+const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...props }) => {
     //This is how React Hooks add state to function components
     const [gameNight, setGameNight] = useState({ ...props.gameNight })
     const [errors, setErrors] = useState({ ...props.errors })
     const [saving, setSaving] = useState(false)
+    console.log(gameNights)
     useEffect(() => {
         if (gameNights.length === 0) {
             actions.gameNight.loadAllNights().catch(error => {
                 alert("Loading game nights failed " + error)
             })
-        } else {
-            setGameNight({ ...props.gameNight })
         }
+        
         //useEffect with an empty array is equivalent to componentDidMount
         //Otherwise, would run everytime it renders
     }, [props.gameNight])
@@ -101,7 +101,7 @@ const ManageGameNightPage = ({ gameNights, actions, history, ...props }) => {
         })
     }
 
-    return gameNights.length === 0 ? (<Spinner />) : (<GameNightForm gameNight={gameNight} errors={errors} onDateChange={handleDateChange} onOptionListChange={handleOptionListChange} onSave={handleSave} saving={saving}></GameNightForm>)
+    return showSpinner ? (<Spinner />) : (<GameNightForm gameNight={gameNight} errors={errors} onDateChange={handleDateChange} onOptionListChange={handleOptionListChange} onSave={handleSave} saving={saving}></GameNightForm>)
 
 }
 
@@ -122,9 +122,18 @@ function mapStateToProps(state, ownProps) {
     // this is available bc /:slug in App.js
     const slug = ownProps.match.params.slug
     const gameNight = slug && state.gameNights.length > 0 ? getGameNightById(state.gameNights, slug) : createNewGameNight()
+    
+    var showSpinner = false
+    if (state.apiCallsInProgress > 0) {
+        showSpinner = true
+    } else if (showSpinner) {
+        showSpinner = false
+    }
+
     return {
         gameNights: state.gameNight.dates,
         gameNight,
+        showSpinner: showSpinner,
         errors: []
     }
 }

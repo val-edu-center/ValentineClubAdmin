@@ -17,7 +17,7 @@ export function updateGameNightSuccess(gameNight) {
 
 export function loadAllNights() {
     return function (dispatch) {
-        dispatch(beginApiCall)
+        dispatch(beginApiCall())
         return gameNightApi
         .getAllNights()
         .then(gameNights => {
@@ -31,7 +31,7 @@ export function loadAllNights() {
 }
 export function loadAllVotes() {
     return function (dispatch) {
-        dispatch(beginApiCall)
+        dispatch(beginApiCall())
         return gameNightApi
         .getAllVotes()
         .then(gameNightVotes => {
