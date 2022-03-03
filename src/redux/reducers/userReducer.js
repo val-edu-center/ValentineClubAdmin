@@ -21,5 +21,6 @@ export default function userReducer(state = initialState.users, action) {
 }
 
 function createUser() {
-    return {user: new User, parseObject: null}
+    const user = new User
+    return user
 }

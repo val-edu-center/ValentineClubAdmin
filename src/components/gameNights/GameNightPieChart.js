@@ -16,12 +16,12 @@ const GameNightPieChart = ({ title, votes }) => {
 
 const getVoteMap = (votes) => {
     return votes.reduce(function(map, vote) {
-        const existingVotes = map[vote.get("option")]
+        const existingVotes = map[vote.option]
         if (existingVotes) {
-            existingVotes.push(vote.get("username"))
-            map[vote.get("option")] = existingVotes
+            existingVotes.push(vote.username)
+            map[vote.option] = existingVotes
         } else {
-            map[vote.get("option")] = [vote.get("username")]
+            map[vote.option] = [vote.username]
         }
         return map
     }, {})

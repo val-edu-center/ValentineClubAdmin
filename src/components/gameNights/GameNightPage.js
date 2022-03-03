@@ -13,12 +13,12 @@ class GameNightPage extends React.Component {
     componentDidMount() {
         const { gameNight, session, actions } = this.props
         const isAdmin = session.roles.isStaff || session.roles.isDirector
-        if (gameNight.dates.length === 0 && session.sessionToken) {
+        if (isAdmin && gameNight.dates.length === 0 && session.sessionToken) {
             actions.gameNight.loadAllNights().catch(error => {
                 alert("Loading game night dates failed " + error)
             })
         }
-        if (gameNight.votes.length === 0 && session.sessionToken && session.roles.isBanker) {
+        if (isAdmin && gameNight.votes.length === 0 && session.sessionToken) {
             actions.gameNight.loadAllVotes().catch(error => {
                 alert("Loading game night votes failed " + error)
             })
@@ -36,21 +36,19 @@ class GameNightPage extends React.Component {
                      Add Game Night
                  </button>
                 {this.props.gameNight.dates.map(gameNight => {
-                    const date = gameNight.get("date")
+                    const date = gameNight.date
                     const dateString = date.toDateString()
                     const votes = this.props.gameNight.votes.filter(
-                        vote => isSameGameNightDate(date, new Date(vote.get("gameNightDate")))
+                        vote => isSameGameNightDate(date, new Date(vote.gameNightDate))
                     )
                     return <GameNightPieChart key={gameNight.id} title={dateString} votes={votes}></GameNightPieChart>
                 })}
             </>
         )
     }
-
 }
 
 function isSameGameNightDate(gameNightDate, gameNightVoteDate) {
-    console.log({gameNightDate, gameNightVoteDate})
     return gameNightDate.getMonth() === gameNightVoteDate.getMonth() && gameNightDate.getDate() === gameNightVoteDate.getDate() && gameNightDate.getYear() === gameNightVoteDate.getYear()
 }
 

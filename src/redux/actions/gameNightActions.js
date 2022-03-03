@@ -47,7 +47,7 @@ export function saveGameNight(gameNight) {
     return function (dispatch) {
         dispatch(beginApiCall())
         return gameNightApi
-        .saveCourse(gameNight)
+        .saveGameNight(gameNight)
         .then(savedGameNight => {
             if (gameNight.id) {
                 dispatch(updateGameNightSuccess(savedGameNight))
@@ -58,5 +58,10 @@ export function saveGameNight(gameNight) {
             dispatch(apiCallError())
             throw error
         })
+    }
+}
+export function updateGameNight(gameNight) {
+    return function (dispatch) {
+        return dispatch(updateGameNightSuccess(gameNight))
     }
 }

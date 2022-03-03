@@ -1,9 +1,9 @@
-import { handleResponse, handleError, loadFromLocalStorage } from "./apiUtils";
+import { handleResponse, handleError, loadFromLocalStorage } from "./apiUtils"
 import Parse from 'parse/dist/parse.min.js'
 import * as userMapper from '../utility/UserMapper'
-const baseUrl = process.env.BACK4APP_API_URL + "/users/";
-const appId = process.env.BACK4APP_APP_ID;
-const restApiKey = process.env.BACK4APP_REST_API_KEY;
+const baseUrl = process.env.BACK4APP_API_URL + "/users/"
+const appId = process.env.BACK4APP_APP_ID
+const restApiKey = process.env.BACK4APP_REST_API_KEY
 
 export function getUsers() {
   const state = loadFromLocalStorage()

@@ -6,7 +6,8 @@ import { bindActionCreators } from 'redux'
 import GameNightForm from "./GameNightForm";
 import { newGameNight } from '../../../tools/mockData'
 import Spinner from "../common/Spinner";
-import { toast } from "react-toastify"
+import Parse from 'parse/dist/parse.min.js'
+import { toast } from "react-toastify";
 
 const ManageGameNightPage = ({ gameNights, actions, history, ...props }) => {
     //This is how React Hooks add state to function components
@@ -25,14 +26,53 @@ const ManageGameNightPage = ({ gameNights, actions, history, ...props }) => {
         //Otherwise, would run everytime it renders
     }, [props.gameNight])
 
+    function changeOptionList(gameNight, option, checked) {
+        const oldParseObject = gameNight.parseObject
+        const newOptions = checked ? [...gameNight.options, option] : gameNight.options.filter(o => o !== option)
+        if (oldParseObject) {
+            oldParseObject.set("options", newOptions)
+            return {
+                ...gameNight,
+                options: newOptions,
+                parseObject: oldParseObject
+            }
+        } else {
+            return {
+                ...gameNight,
+                options: newOptions
+            }
+        }
+    }
 
-    //name identifies the field that's changed
-    function handleChange(event) {
-        const { name, value } = event.target
-        setGameNight(prevGameNight => ({
-            ...prevGameNight,
-            [name]: value
-        }))
+    function handleOptionListChange(event) {
+        const option = event.target.name
+        const newGameNight = changeOptionList(gameNight, option, event.target.checked)
+        setGameNight(newGameNight)
+
+    }
+
+    function changeDate(gameNight, newDate) {
+        const oldParseObject = gameNight.parseObject
+        if (oldParseObject) {
+            oldParseObject.set("date", new Date(newDate))
+            return {
+                ...gameNight,
+                date: newDate,
+                parseObject: oldParseObject
+            }
+        } else {
+            return {
+                ...gameNight,
+                date: newDate
+            }
+        }
+    }
+
+    function handleDateChange(event) {
+        const newDate = event.target.value
+        const newGameNight = changeDate(gameNight, newDate)
+        setGameNight(newGameNight)
+
     }
 
     function formIsValid() {
@@ -51,6 +91,7 @@ const ManageGameNightPage = ({ gameNights, actions, history, ...props }) => {
         event.preventDefault()
         if (!formIsValid()) return
         setSaving(true)
+        console.log(gameNight)
         actions.gameNight.saveGameNight(gameNight).then(() => {
             toast.success("Game night saved.")
             history.push("/gamenights")
@@ -60,7 +101,7 @@ const ManageGameNightPage = ({ gameNights, actions, history, ...props }) => {
         })
     }
 
-    return gameNights.length === 0 ? (<Spinner />) : (<GameNightForm gameNight={gameNight} errors={errors} onChange={handleChange} onSave={handleSave} saving={saving}></GameNightForm>)
+    return gameNights.length === 0 ? (<Spinner />) : (<GameNightForm gameNight={gameNight} errors={errors} onDateChange={handleDateChange} onOptionListChange={handleOptionListChange} onSave={handleSave} saving={saving}></GameNightForm>)
 
 }
 
@@ -80,7 +121,7 @@ export function getGameNightById(gameNights, id) {
 function mapStateToProps(state, ownProps) {
     // this is available bc /:slug in App.js
     const slug = ownProps.match.params.slug
-    const gameNight = slug && state.gameNights.length > 0 ? getGameNightById(state.gameNights, slug) : newGameNight
+    const gameNight = slug && state.gameNights.length > 0 ? getGameNightById(state.gameNights, slug) : createNewGameNight()
     return {
         gameNights: state.gameNight.dates,
         gameNight,
@@ -88,6 +129,11 @@ function mapStateToProps(state, ownProps) {
     }
 }
 
+function createNewGameNight() {
+    const gameNight = newGameNight
+    gameNight.parseObject = new Parse.Object("GameNight")
+    return gameNight
+}
 function mapDispatchToProps(dispatch) {
     return {
         actions: {

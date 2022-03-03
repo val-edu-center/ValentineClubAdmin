@@ -1,11 +1,13 @@
 import React from "react"
 import PropTypes from "prop-types"
-import TextInput from "../common/TextInput"
+import DateInput from "../common/DateInput"
+import CheckboxInput from "../common/CheckboxInput";
 
 const GameNightForm = ({
    gameNight,
    onSave,
-   onChange,
+   onDateChange,
+   onOptionListChange,
    saving = false,
    errors = {}
  }) => {
@@ -17,12 +19,20 @@ const GameNightForm = ({
            {errors.onSave}
          </div>
        )}
-       <TextInput
+       <DateInput
          name="date"
          label="Date"
          value={gameNight.date}
-         onChange={onChange}
+         onChange={onDateChange}
          error={errors.date}
+       />
+
+       <CheckboxInput
+         name="options"
+         label="Options"
+         values={gameNight.options}
+         onChange={onOptionListChange}
+         error={errors.options}
        />
 
        <button type="submit" disabled={saving} className="btn btn-primary">
@@ -36,7 +46,8 @@ const GameNightForm = ({
    gameNight: PropTypes.object.isRequired,
    errors: PropTypes.object,
    onSave: PropTypes.func.isRequired,
-   onChange: PropTypes.func.isRequired,
+   onDateChange: PropTypes.func.isRequired,
+   onOptionListChange: PropTypes.func.isRequired,
    saving: PropTypes.bool
  };
 

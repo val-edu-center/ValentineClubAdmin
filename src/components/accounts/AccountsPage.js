@@ -81,8 +81,6 @@ class AccountsPage extends React.Component {
         //   console,log(myObject); // remains unchanged
     }
 
-    
-
     handleDeleteUser = user => {
         toast.success("User deleted")
         this.props.actions.users.deleteUser(user).catch(

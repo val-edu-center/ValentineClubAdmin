@@ -1,6 +1,7 @@
 const newGameNight = {
     id: null,
-    date: null,
+    date: "",
+    parseObject: null,
     options: []
 }
 
