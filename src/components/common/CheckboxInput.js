@@ -9,7 +9,8 @@ const CheckboxInput = ({ name, label, values, onChange, error }) => {
     const possibleOptions = ["Ya", "Yeet", "Mardi", "Gras", "Dat", "Boi"]
 
     return (
-        <div className={wrapperClass}>
+        <div className={wrapperClass} style={{margin:"10px"}}>
+            <label htmlFor={name}>{label}</label>
             {possibleOptions.map(option => buildInput(option, values, onChange))}
             {error && <div className="alert alert-danger">{error}</div>}
         </div>
@@ -27,7 +28,6 @@ CheckboxInput.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string,
     values: PropTypes.array,
     error: PropTypes.string
 };

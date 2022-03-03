@@ -8,7 +8,7 @@ const DateInput = ({ name, label, value, onChange, error }) => {
     }
 
     return (
-        <div className={wrapperClass}>
+        <div className={wrapperClass} style={{margin:"10px"}}>
             <label htmlFor={name}>{label}</label>
             <div className="field">
                 <input type="date" name={name} className="form-control" placeholder={value}

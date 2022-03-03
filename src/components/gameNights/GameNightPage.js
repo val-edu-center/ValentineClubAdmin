@@ -4,7 +4,7 @@ import * as gameNightActions from "../../redux/actions/gameNightActions"
 import { bindActionCreators } from 'redux'
 import { Redirect } from 'react-router-dom'
 import GameNightPieChart from "./GameNightPieChart"
-
+import PropTypes from "prop-types"
 
 class GameNightPage extends React.Component {
     state = {
@@ -28,7 +28,7 @@ class GameNightPage extends React.Component {
     render() {
         return (
             <>
-                {!this.props.session.sessionToken && <Redirect to="/unauthorized" />}
+                {(!this.props.session.sessionToken || !(this.props.session.roles.isStaff || this.props.session.roles.isDirector)) && <Redirect to="/unauthorized" />}
                 {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
                 {this.state.redirectToAddGameNightPage && <Redirect to="/gamenight/" />}
                 <h2>Game Nights</h2>
@@ -68,5 +68,12 @@ function mapDispatchToProps(dispatch) {
         }
     }
 }
+
+GameNightPage.propTypes = {
+    gameNight: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
+    actions: PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameNightPage);

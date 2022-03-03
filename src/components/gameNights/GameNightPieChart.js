@@ -1,6 +1,7 @@
 import React from "react"
 import Highcharts from 'highcharts/highstock'
 import HighchartsReact from 'highcharts-react-official'
+import PropTypes from "prop-types"
 
 const GameNightPieChart = ({ title, votes }) => {
     const voteMap = getVoteMap(votes)
@@ -74,5 +75,10 @@ const getOptions = (title, data) => {
         }]
     }
 }
+
+GameNightPieChart.propTypes = {
+    title: PropTypes.string.isRequired,
+    votes: PropTypes.array.isRequired
+};
 
 export default GameNightPieChart

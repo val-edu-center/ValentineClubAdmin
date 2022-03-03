@@ -26,7 +26,6 @@ const GameNightForm = ({
          onChange={onDateChange}
          error={errors.date}
        />
-
        <CheckboxInput
          name="options"
          label="Options"

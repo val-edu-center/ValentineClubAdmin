@@ -14,14 +14,13 @@ const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...pro
     const [gameNight, setGameNight] = useState({ ...props.gameNight })
     const [errors, setErrors] = useState({ ...props.errors })
     const [saving, setSaving] = useState(false)
-    console.log(gameNights)
     useEffect(() => {
         if (gameNights.length === 0) {
             actions.gameNight.loadAllNights().catch(error => {
                 alert("Loading game nights failed " + error)
             })
         }
-        
+
         //useEffect with an empty array is equivalent to componentDidMount
         //Otherwise, would run everytime it renders
     }, [props.gameNight])
@@ -29,18 +28,11 @@ const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...pro
     function changeOptionList(gameNight, option, checked) {
         const oldParseObject = gameNight.parseObject
         const newOptions = checked ? [...gameNight.options, option] : gameNight.options.filter(o => o !== option)
-        if (oldParseObject) {
-            oldParseObject.set("options", newOptions)
-            return {
-                ...gameNight,
-                options: newOptions,
-                parseObject: oldParseObject
-            }
-        } else {
-            return {
-                ...gameNight,
-                options: newOptions
-            }
+        oldParseObject.set("options", newOptions)
+        return {
+            ...gameNight,
+            options: newOptions,
+            parseObject: oldParseObject
         }
     }
 
@@ -53,18 +45,11 @@ const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...pro
 
     function changeDate(gameNight, newDate) {
         const oldParseObject = gameNight.parseObject
-        if (oldParseObject) {
-            oldParseObject.set("date", new Date(newDate))
-            return {
-                ...gameNight,
-                date: newDate,
-                parseObject: oldParseObject
-            }
-        } else {
-            return {
-                ...gameNight,
-                date: newDate
-            }
+        oldParseObject.set("date", new Date(newDate))
+        return {
+            ...gameNight,
+            date: newDate,
+            parseObject: oldParseObject
         }
     }
 
@@ -91,7 +76,6 @@ const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...pro
         event.preventDefault()
         if (!formIsValid()) return
         setSaving(true)
-        console.log(gameNight)
         actions.gameNight.saveGameNight(gameNight).then(() => {
             toast.success("Game night saved.")
             history.push("/gamenights")
@@ -111,7 +95,8 @@ ManageGameNightPage
     errors: PropTypes.array.isRequired,
     gameNights: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    showSpinner: PropTypes.bool.isRequired
 }
 
 export function getGameNightById(gameNights, id) {
@@ -122,7 +107,7 @@ function mapStateToProps(state, ownProps) {
     // this is available bc /:slug in App.js
     const slug = ownProps.match.params.slug
     const gameNight = slug && state.gameNights.length > 0 ? getGameNightById(state.gameNights, slug) : createNewGameNight()
-    
+
     var showSpinner = false
     if (state.apiCallsInProgress > 0) {
         showSpinner = true
