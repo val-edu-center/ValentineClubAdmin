@@ -45,7 +45,7 @@ const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...pro
 
     function changeDate(gameNight, newDate) {
         const oldParseObject = gameNight.parseObject
-        oldParseObject.set("date", new Date(newDate))
+        oldParseObject.set("date", new Date(newDate + "T00:00:00.000-06:00"))
         return {
             ...gameNight,
             date: newDate,

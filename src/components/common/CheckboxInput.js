@@ -1,17 +1,16 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-const CheckboxInput = ({ name, label, values, onChange, error }) => {
+const CheckboxInput = ({ name, label, values, options, onChange, error }) => {
     let wrapperClass = "form-group";
     if (error && error.length > 0) {
         wrapperClass += " " + "has-error";
     }
-    const possibleOptions = ["Ya", "Yeet", "Mardi", "Gras", "Dat", "Boi"]
 
     return (
         <div className={wrapperClass} style={{margin:"10px"}}>
             <label htmlFor={name}>{label}</label>
-            {possibleOptions.map(option => buildInput(option, values, onChange))}
+            {options.map(option => buildInput(option, values, onChange))}
             {error && <div className="alert alert-danger">{error}</div>}
         </div>
     );
@@ -29,6 +28,7 @@ CheckboxInput.propTypes = {
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     values: PropTypes.array,
+    options: PropTypes.array.isRequired,
     error: PropTypes.string
 };
 
