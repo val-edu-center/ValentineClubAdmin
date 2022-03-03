@@ -10,6 +10,7 @@ import Parse from 'parse/dist/parse.min.js'
 import { toast } from "react-toastify";
 
 const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...props }) => {
+    const possibleOptions = ['Super Mario Party','Mario Kart 8 Deluxe','Overcooked','Gang Beasts','Jenga','Ping Pong','Super Smash','Jackbox Party Pack','Uno!','Monopoly Deal','Brawlhalla','Pico Park','Dungeons and Dragons','Marble','Risk: Global Domination','Survivor Pong','Ring The Bells']
     //This is how React Hooks add state to function components
     const [gameNight, setGameNight] = useState({ ...props.gameNight })
     const [errors, setErrors] = useState({ ...props.errors })
@@ -27,12 +28,23 @@ const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...pro
 
     function changeOptionList(gameNight, option, checked) {
         const oldParseObject = gameNight.parseObject
-        const newOptions = checked ? [...gameNight.options, option] : gameNight.options.filter(o => o !== option)
-        oldParseObject.set("options", newOptions)
-        return {
-            ...gameNight,
-            options: newOptions,
-            parseObject: oldParseObject
+        if (option === 'select-all') {
+            const newOptions = checked ? possibleOptions : []
+            oldParseObject.set("options", newOptions)
+            return {
+                ...gameNight,
+                options: newOptions,
+                parseObject: oldParseObject
+            }
+
+        } else {
+            const newOptions = checked ? [...gameNight.options, option] : gameNight.options.filter(o => o !== option)
+            oldParseObject.set("options", newOptions)
+            return {
+                ...gameNight,
+                options: newOptions,
+                parseObject: oldParseObject
+            }
         }
     }
 
@@ -85,7 +97,7 @@ const ManageGameNightPage = ({ showSpinner, gameNights, actions, history, ...pro
         })
     }
 
-    return showSpinner ? (<Spinner />) : (<GameNightForm gameNight={gameNight} errors={errors} onDateChange={handleDateChange} onOptionListChange={handleOptionListChange} onSave={handleSave} saving={saving}></GameNightForm>)
+    return showSpinner ? (<Spinner />) : (<GameNightForm gameNight={gameNight} errors={errors} onDateChange={handleDateChange} onOptionListChange={handleOptionListChange} onSave={handleSave} saving={saving} possibleOptions={possibleOptions}></GameNightForm>)
 
 }
 

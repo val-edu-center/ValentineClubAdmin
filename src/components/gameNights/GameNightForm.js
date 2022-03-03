@@ -8,10 +8,10 @@ const GameNightForm = ({
   onSave,
   onDateChange,
   onOptionListChange,
+  possibleOptions,
   saving = false,
   errors = {}
 }) => {
-  const possibleOptions = ['Super Mario Party','Mario Kart 8 Deluxe','Overcooked','Gang Beasts','Jenga','Ping Pong','Super Smash','Jackbox Party Pack','Uno!','Monopoly Deal','Brawlhalla','Pico Park','Dungeons and Dragons','Marble','Risk: Global Domination','Survivor Pong','Ring The Bells']
   return (
     <form onSubmit={onSave}>
       <h2>{gameNight.id ? "Edit" : "Add"} Game Night</h2>
@@ -49,6 +49,7 @@ GameNightForm.propTypes = {
   onSave: PropTypes.func.isRequired,
   onDateChange: PropTypes.func.isRequired,
   onOptionListChange: PropTypes.func.isRequired,
+  possibleOptions: PropTypes.array.isRequired,
   saving: PropTypes.bool
 };
 

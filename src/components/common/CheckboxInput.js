@@ -6,10 +6,11 @@ const CheckboxInput = ({ name, label, values, options, onChange, error }) => {
     if (error && error.length > 0) {
         wrapperClass += " " + "has-error";
     }
-
     return (
         <div className={wrapperClass} style={{margin:"10px"}}>
-            <label htmlFor={name}>{label}</label>
+            <label htmlFor={name}>{label}</label><br/>
+            <input type="checkbox" name="select-all" onChange={onChange}></input>
+            <label htmlFor="select-all"><strong>Select All</strong></label>
             {options.map(option => buildInput(option, values, onChange))}
             {error && <div className="alert alert-danger">{error}</div>}
         </div>
@@ -18,7 +19,8 @@ const CheckboxInput = ({ name, label, values, options, onChange, error }) => {
 
 const buildInput = (name, values, onChange) => {
     return <div key={name}>
-        <input type="checkbox" name={name} onChange={onChange}></input>
+        {}
+        <input type="checkbox" name={name} onChange={onChange} checked={values.includes(name)}></input>
         <label htmlFor={name}>{name}</label>
     </div>
 }
