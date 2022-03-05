@@ -4,7 +4,7 @@ import initialState from './initialState'
 export default function userReducer(state = initialState.users, action) {
     switch(action.type) {
         case CREATE_USER_SUCCESS:
-            return [...state, action.user]
+            return [action.user, ...state]
         case UPDATE_USER_SUCCESS:
             return state.map (
                 user => user.id === action.user.id ? action.user : user 

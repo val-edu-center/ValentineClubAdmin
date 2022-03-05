@@ -42,6 +42,8 @@ export function saveUser(rawUser) {
 export const getUsersParse = async () => {
   const User = new Parse.User()
   const query = new Parse.Query(User)
+
+  query.descending('createdAt');
   
   const results = await query.find()
   return results.map(user => userMapper.mapUserParse(user))

@@ -62,7 +62,23 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         return account.roles.filter(role => role !== account.groupRole)
     }
 
+    function setUsername(first, groupRole, last) {
+        return first.toLowerCase() + '.' + last.toLowerCase() + '.' + groupRole.toLowerCase()
+    }
+
+    function setPassword(first, groupRole, last) {
+        return first.toLowerCase() + '!@!' + groupRole.toLowerCase() + '#$#' + last.toLowerCase()
+    }
+
     function changeGroupRole(account, groupRole) {
+        const parseObject = account.parseObject
+        const rolesObject = roleMapper.getRoles(account.roles)
+        if (rolesObject.isPrep || rolesObject.isCadet) {
+            const username = setUsername(account.first, groupRole, account.last)
+            const password = setPassword(account.first, groupRole, account.last)
+            parseObject.set("username", username)
+            parseObject.set("password", password)
+        }
         const roles = [...filterOldGroupRole(account), groupRole]
         return { ...account, roles, groupRole }
     }
@@ -78,8 +94,8 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         const roles = roleMapper.getRoles(account.roles)
         parseObject.set("lastName", last)
         if (roles.isPrep || roles.isCadet) {
-            const username = account.first + "-" + account.groupRole + "-" + last
-            const password = account.first + "!@!" + account.groupRole + "!@!" + last
+            const username = setUsername(account.first, account.groupRole, last)
+            const password = setPassword(account.first, account.groupRole, last)
             parseObject.set("username", username)
             parseObject.set("password", password)
         }
@@ -97,8 +113,8 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         const roles = roleMapper.getRoles(account.roles)
         parseObject.set("firstName", first)
         if (roles.isPrep || roles.isCadet) {
-            const username = first + "-" + account.groupRole + "-" + account.last
-            const password = first + "!@!" + account.groupRole + "!@!" + account.last
+            const username = setUsername(first, account.groupRole, account.last)
+            const password = setPassword(first, account.groupRole, account.last)
             parseObject.set("username", username)
             parseObject.set("password", password)
         }
