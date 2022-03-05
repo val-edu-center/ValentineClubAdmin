@@ -1,4 +1,4 @@
-import { LOAD_SESSION_PARSE_SUCCESS, LOAD_SESSION_SUCCESS, REMOVE_SESSION } from "./actionTypes";
+import { LOAD_SESSION_PARSE_SUCCESS, LOAD_SESSION_SUCCESS, REMOVE_SESSION, CLEAR_BANK_ACCOUNTS, CLEAR_GAME_NIGHT, CLEAR_ROLES, CLEAR_USERS } from "./actionTypes";
 import * as sessionApi from '../../api/sessionApi'
 import { beginApiCall, apiCallError } from "./apiStatusActions";
 
@@ -42,6 +42,10 @@ export function loadSessionParse({username, password}) {
 
 export function removeSession() {
     return function (dispatch) {
-        return dispatch({type: REMOVE_SESSION})
+        dispatch({type: REMOVE_SESSION})
+        dispatch({type: CLEAR_USERS})
+        dispatch({type: CLEAR_ROLES})
+        dispatch({type: CLEAR_BANK_ACCOUNTS})
+        dispatch({type: CLEAR_GAME_NIGHT})
     }
 }

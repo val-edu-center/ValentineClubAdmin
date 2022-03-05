@@ -34,6 +34,18 @@ export function getRoles(roleArray) {
     if (isTeen(roleArray)) {
         roles.isTeen = true
     }
+    if (isIntermediate(roleArray)) {
+        roles.isIntermeidate = true
+    }
+    if (isJunior(roleArray)) {
+        roles.isJunior = true
+    }
+    if (isPrep(roleArray)) {
+        roles.isPrep = true
+    }
+    if (isCadet(roleArray)) {
+        roles.isCadet = true
+    }
     return roles
 }
 

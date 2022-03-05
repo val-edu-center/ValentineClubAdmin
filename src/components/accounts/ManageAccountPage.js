@@ -73,13 +73,56 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         setAccount(newAccount)
     }
 
+    function changeLast(account, last) {
+        const parseObject = account.parseObject
+        const roles = roleMapper.getRoles(account.roles)
+        parseObject.set("lastName", last)
+        if (roles.isPrep || roles.isCadet) {
+            const username = account.first + "-" + account.groupRole + "-" + last
+            const password = account.first + "!@!" + account.groupRole + "!@!" + last
+            parseObject.set("username", username)
+            parseObject.set("password", password)
+        }
+        return { ...account, last, parseObject }
+    }
+
+    function handleLastChange(event) {
+        const newLast = event.target.value
+        const newAccount = changeLast(account, newLast)
+        setAccount(newAccount)
+    }
+
+    function changeFirst(account, first) {
+        const parseObject = account.parseObject
+        const roles = roleMapper.getRoles(account.roles)
+        parseObject.set("firstName", first)
+        if (roles.isPrep || roles.isCadet) {
+            const username = first + "-" + account.groupRole + "-" + account.last
+            const password = first + "!@!" + account.groupRole + "!@!" + account.last
+            parseObject.set("username", username)
+            parseObject.set("password", password)
+        }
+        return { ...account, first, parseObject }
+    }
+
+    function handleFirstChange(event) {
+        const newFirst = event.target.value
+        const newAccount = changeFirst(account, newFirst)
+        setAccount(newAccount)
+
+    }
+
     function formIsValid() {
-        const { username, groupRole, password } = account
+        const { username, groupRole, password, first, last } = account
+        const roles = roleMapper.getRoles(account.roles)
+        const enableUserAndPass = !roles.isPrep && !roles.isCadet
         const errors = {}
 
-        if (!username) errors.username = "Username is required"
         if (!groupRole) errors.role = "Role is required"
-        if (!password) errors.password = "Password is required"
+        if (!username && enableUserAndPass) errors.username = "Username is required"
+        if (!password && enableUserAndPass) errors.password = "Password is required"
+        if (!first) errors.first = "First Name is required"
+        if (!last) errors.last = "Last Name is required"
 
         setErrors(errors)
         return Object.keys(errors).length === 0
@@ -91,14 +134,11 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         if (!formIsValid()) return
         setSaving(true)
 
-
         const oldGroupRoleName = roleMapper.getGroupRole(account.parseObject.get("roles"))
         const newGroupRoleName = account.groupRole
         account.parseObject.set("roles", account.roles)
+        account.parseObject.set('isApproved', true)
 
-
-
-        
         actions.users.saveUser(account).then((updatedAccount) => {
             if (newGroupRoleName !== oldGroupRoleName) {
                 const newRole = allRoles.find(role => role.getName() === newGroupRoleName)
@@ -117,7 +157,7 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         })
     }
 
-    return <AccountForm account={account} onPasswordChange={handlePasswordChange} onRoleChange={handleRoleChange} onUsernameChange={handleUsernameChange} onSave={handleSave} errors={errors} saving={saving}></AccountForm>
+    return <AccountForm account={account} onFirstChange={handleFirstChange} onLastChange={handleLastChange} onPasswordChange={handlePasswordChange} onRoleChange={handleRoleChange} onUsernameChange={handleUsernameChange} onSave={handleSave} errors={errors} saving={saving}></AccountForm>
 }
 
 ManageAccountPage.propTypes = {

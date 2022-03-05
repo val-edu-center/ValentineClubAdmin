@@ -1,4 +1,4 @@
-import { CREATE_USER_SUCCESS, UPDATE_USER_SUCCESS, LOAD_USERS_SUCCESS, DELETE_USER_OPTIMISTIC } from "../actions/actionTypes"
+import { CREATE_USER_SUCCESS, UPDATE_USER_SUCCESS, LOAD_USERS_SUCCESS, DELETE_USER_OPTIMISTIC, CLEAR_USERS } from "../actions/actionTypes"
 import initialState from './initialState'
 
 export default function userReducer(state = initialState.users, action) {
@@ -13,6 +13,8 @@ export default function userReducer(state = initialState.users, action) {
             return action.users
         case DELETE_USER_OPTIMISTIC:
             return state.filter (user => user.id !== action.user.id)
+        case CLEAR_USERS:
+            return initialState.users
         default:
             return state
     }

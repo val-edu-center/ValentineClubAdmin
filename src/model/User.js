@@ -8,6 +8,8 @@ class User {
     groupRole = null
     createBankAccount = false
     password = ""
+    last = ""
+    first = ""
 }
 
 export default User
