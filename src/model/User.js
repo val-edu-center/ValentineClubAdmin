@@ -7,6 +7,7 @@ class User {
     isApproved = false
     groupRole = null
     createBankAccount = false
+    password = ""
 }
 
 export default User

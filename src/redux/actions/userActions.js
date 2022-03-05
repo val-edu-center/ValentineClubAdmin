@@ -39,7 +39,7 @@ export function saveUser(user) {
         return userApi
         .saveUserParse(user)
         .then(updatedUser => { 
-            if (updatedUser.id) {
+            if (user.id) {
                 dispatch(updateUserSuccess(updatedUser))
             } else {
                 dispatch(createUserSuccess(updatedUser))

@@ -15,6 +15,7 @@ export const roleGroups = [CADET_ROLE, PREP_ROLE, JUNIOR_ROLE, INTERMEDIATE_ROLE
 
 export function getRoles(roleArray) {
     const roles = new Roles
+    if (!roleArray) return roles
     if (isDirector(roleArray)) {
         roles.isDirector = true
     }
@@ -37,6 +38,7 @@ export function getRoles(roleArray) {
 }
 
 export function getGroupRole(roleArray) {
+    if (!roleArray) return null
     if (isDirector(roleArray)) {
         return DIRECTOR_ROLE
     }
