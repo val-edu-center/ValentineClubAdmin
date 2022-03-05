@@ -29,7 +29,6 @@ class GameNightPage extends React.Component {
         return (
             <>
                 {(!this.props.session.sessionToken || !(this.props.session.roles.isStaff || this.props.session.roles.isDirector)) && <Redirect to="/unauthorized" />}
-                {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
                 {this.state.redirectToAddGameNightPage && <Redirect to="/gamenight/" />}
                 <h2>Game Nights</h2>
                 <button style={{ marginBottom: 20 }} className="btn btn-primary" onClick={ () => this.setState({ redirectToAddGameNightPage: true})}>

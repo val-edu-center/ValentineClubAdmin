@@ -162,10 +162,15 @@ const login = {
 
 
 const newUser = {
-  id: null,
-  username: "",
-  password: ""
-};
+    parseObject: null,
+    createdAt: null,
+    roles: [],
+    id: "",
+    username: "",
+    isApproved: false,
+    groupRole: null,
+    createBankAccount: false
+}
 
 // Using CommonJS style export so we can consume via Node (without using Babel-node)
 module.exports = {

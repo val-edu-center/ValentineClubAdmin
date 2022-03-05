@@ -9,6 +9,8 @@ export function mapUserParse(parseUser) {
     user.username = parseUser.getUsername()
     user.roles = roles
     user.isApproved = parseUser.get("isApproved")
+    user.first = parseUser.get("firstName")
+    user.last = parseUser.get("lastName")
     user.parseObject = parseUser
     user.groupRole = roleMapper.getGroupRole(roles)
     return user

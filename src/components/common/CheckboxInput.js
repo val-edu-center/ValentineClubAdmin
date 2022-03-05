@@ -33,5 +33,4 @@ CheckboxInput.propTypes = {
     error: PropTypes.string
 };
 
-
 export default CheckboxInput;

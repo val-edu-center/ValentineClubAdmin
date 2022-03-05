@@ -111,10 +111,6 @@ ManageGameNightPage
     showSpinner: PropTypes.bool.isRequired
 }
 
-export function getGameNightById(gameNights, id) {
-    return gameNights.find(gameNight => gameNight.id === id) || null
-}
-
 function mapStateToProps(state, ownProps) {
     // this is available bc /:slug in App.js
     const slug = ownProps.match.params.slug
@@ -133,6 +129,10 @@ function mapStateToProps(state, ownProps) {
         showSpinner: showSpinner,
         errors: []
     }
+}
+
+function getGameNightById(gameNights, id) {
+    return gameNights.find(gameNight => gameNight.id === id) || null
 }
 
 function createNewGameNight() {

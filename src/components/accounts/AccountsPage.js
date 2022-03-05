@@ -12,6 +12,9 @@ import { toast } from "react-toastify"
 import * as roleMapper from "../../utility/RoleMapper"
 
 class AccountsPage extends React.Component {
+    state = {
+        redirectToAddAccountPage: false
+    }
     componentDidMount() {
         const { users, actions, bankAccounts, session, allRoles} = this.props
         const isAdmin = session.roles.isStaff || session.roles.isDirector
@@ -148,7 +151,11 @@ class AccountsPage extends React.Component {
             <>
                 {!this.props.session.sessionToken && <Redirect to="/unauthorized" />}
                 {/* TODO: Conditionally render Members instead of accounts, if the current user is a Member */}
+                {this.state.redirectToAddAccountPage && <Redirect to="/account/" />}
                 <h2>Accounts</h2>
+                <button style={{ marginBottom: 20 }} className="btn btn-primary" onClick={ () => this.setState({ redirectToAddAccountPage: true})}>
+                     Add User
+                 </button>
                 {this.props.loading ? (<Spinner />) : (
                     <AccountList bankAccounts={this.props.bankAccounts} session={this.props.session} users={this.props.users} onDeleteClick={this.handleDeleteUser} onGroupRoleChange={this.handleGroupeRoleChange} onIsApprovedChange={this.handleIsApprovedChange} onSubmitClick={this.handleSubmitUser} onCreateBankAccountChange={this.handleCreateBankAccountChange}></AccountList>)
                 }
