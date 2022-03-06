@@ -1,12 +1,11 @@
-# Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
+# Starter Kit for VCA (Valentine Club Admin)
 
 ## Get Started
 
 1. **Install [Node 8](https://nodejs.org)** or newer. Need to run multiple versions of Node? Use [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)(https://github.com/coryhouse/pluralsight-redux-starter/archive/master.zip)
 2. **Navigate to this project's root directory on the command line.**
 3. **Install Node Packages.** - `npm install`
-4. **Install [React developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) and [Redux Dev Tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)** in Chrome.
-5. Having issues? See below.
+4. Having issues? See below.
 
 ## Having Issues? Try these things first:
 
