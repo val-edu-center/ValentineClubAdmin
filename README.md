@@ -5,7 +5,8 @@
 1. **Install [Node 8](https://nodejs.org)** or newer. Need to run multiple versions of Node? Use [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)(https://github.com/coryhouse/pluralsight-redux-starter/archive/master.zip)
 2. **Navigate to this project's root directory on the command line.**
 3. **Install Node Packages.** - `npm install`
-4. Having issues? See below.
+4. **Start.** - `npm start`
+5. Having issues? See below.
 
 ## Having Issues? Try these things first:
 
