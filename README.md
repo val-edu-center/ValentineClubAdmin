@@ -31,6 +31,7 @@
 | redux            | Library for unidirectional data flows                |
 | redux-thunk      | Async redux library                                  |
 | reselect         | Memoize selectors for performance                    |
+| parse            | Used to communicate with B4A backend                 |
 
 ### Development Dependencies
 
