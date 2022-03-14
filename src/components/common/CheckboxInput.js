@@ -7,7 +7,7 @@ const CheckboxInput = ({ name, label, values, options, onChange, error }) => {
         wrapperClass += " " + "has-error";
     }
     return (
-        <div className={wrapperClass} style={{margin:"10px"}}>
+        <div className={wrapperClass}>
             <label htmlFor={name}>{label}</label><br/>
             <input type="checkbox" name="select-all" onChange={onChange}></input>
             <label htmlFor="select-all"><strong>Select All</strong></label>

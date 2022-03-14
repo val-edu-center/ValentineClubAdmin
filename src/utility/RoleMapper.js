@@ -11,22 +11,13 @@ const TEEN_ROLE = 'Teen'
 const BANKER_ROLE = 'Banker'
 const DESIGNER_ROLE = '3D Designer'
 const PRINTER_ROLE = '3D Printer'
-export const roleGroups = [CADET_ROLE, PREP_ROLE, JUNIOR_ROLE, INTERMEDIATE_ROLE, TEEN_ROLE, STAFF_ROLE, DIRECTOR_ROLE]
+export const roleGroups = [CADET_ROLE, PREP_ROLE, JUNIOR_ROLE, INTERMEDIATE_ROLE, TEEN_ROLE, STAFF_ROLE, DIRECTOR_ROLE, CLUB_ROLE]
 
 export function getRoles(roleArray) {
     const roles = new Roles
     if (!roleArray) return roles
     if (isDirector(roleArray)) {
         roles.isDirector = true
-    }
-    if (is3DClubDesigner(roleArray)) {
-        roles.is3DClubDesigner = true
-    }
-    if (is3DClubPrinter(roleArray)) {
-        roles.is3DClubPrinter = true
-    }
-    if (isBanker(roleArray)) {
-        roles.isBanker = true
     }
     if (isStaff(roleArray)) {
         roles.isStaff = true
@@ -45,6 +36,15 @@ export function getRoles(roleArray) {
     }
     if (isCadet(roleArray)) {
         roles.isCadet = true
+    }
+    if (is3DClubDesigner(roleArray)) {
+        roles.is3DClubDesigner = true
+    }
+    if (is3DClubPrinter(roleArray)) {
+        roles.is3DClubPrinter = true
+    }
+    if (isBanker(roleArray)) {
+        roles.isBanker = true
     }
     return roles
 }

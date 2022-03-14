@@ -1,6 +1,6 @@
 import * as roleApi from "../../api/roleApi"
 import { beginApiCall, apiCallError } from "./apiStatusActions"
-import { CHANGE_GROUP_ROLE_SUCCESS, LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE } from "./actionTypes"
+import { ADD_USER_ROLE_SUCCESS, CHANGE_GROUP_ROLE_SUCCESS, LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE, REMOVE_USER_ROLE_SUCCESS } from "./actionTypes"
 
 export function loadAllRolesSuccess(allRoles) {
     return { type: LOAD_ALL_ROLES_SUCCESS, allRoles }
@@ -10,8 +10,16 @@ export function loadUsersForRoleSuccess(role, users) {
     return { type: LOAD_USERS_FOR_ROLE, role, users }
 }
 
-export function changeGroupRoleSucces(user, newRole, oldRole) {
+export function changeGroupRoleSuccess(user, newRole, oldRole) {
     return { type: CHANGE_GROUP_ROLE_SUCCESS, oldRole, newRole, user }
+}
+
+export function addUserSuccess(user, role) {
+    return { type: ADD_USER_ROLE_SUCCESS, user, role}
+}
+
+export function removeUserSuccess(user, role) {
+    return { type: REMOVE_USER_ROLE_SUCCESS, user, role}
 }
 
 export function loadAllRoles() {
@@ -55,7 +63,7 @@ export function changeGroupRole(user, newRole, oldRole) {
                         if (oldRole !== null) {
                             roleApi.removeUser(oldRole, user)
                                 .then(() => {
-                                    dispatch(changeGroupRoleSucces(user, newRole, oldRole))
+                                    dispatch(changeGroupRoleSuccess(user, newRole, oldRole))
                                 })
                                 .catch(error => {
                                     dispatch(apiCallError())
@@ -73,5 +81,27 @@ export function changeGroupRole(user, newRole, oldRole) {
                 dispatch(apiCallError())
                 throw error
             })
+    }
+}
+
+export function changeRoles(user, rolesToAdd, rolesToRemove) {
+    return function (dispatch) {
+        rolesToAdd.map(roleToAdd => roleApi.addUser(roleToAdd, user)
+        .then(() => {
+            dispatch(addUserSuccess(user, roleToAdd))
+        })
+        .catch(error => {
+            dispatch(apiCallError())
+            throw error
+        }))
+        rolesToRemove.map(roleToRemove => roleApi.removeUser(roleToRemove, user)
+        .then(() => {
+            dispatch(removeUserSuccess(user, roleToRemove))
+        })
+        .catch(error => {
+            dispatch(apiCallError())
+            throw error
+        }))
+        return
     }
 }

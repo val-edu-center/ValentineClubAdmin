@@ -1,4 +1,4 @@
-import { LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE, CHANGE_GROUP_ROLE_SUCCESS, CLEAR_ROLES } from "../actions/actionTypes"
+import { LOAD_ALL_ROLES_SUCCESS, LOAD_USERS_FOR_ROLE, CHANGE_GROUP_ROLE_SUCCESS, CLEAR_ROLES, ADD_USER_ROLE_SUCCESS, REMOVE_USER_ROLE_SUCCESS } from "../actions/actionTypes"
 import initialState from "./initialState"
 
 export default function roleReducer(state = initialState.roles, action) {
@@ -7,8 +7,12 @@ export default function roleReducer(state = initialState.roles, action) {
             return { ...state, all: action.allRoles }
         case LOAD_USERS_FOR_ROLE:
             return { ...state, userToRoles: addUsers(state, action.role.get('name'), action.users) }
+        case ADD_USER_ROLE_SUCCESS:
+            return { ...state, userToRoles: changeRole(state, action.user, action.role.get('name'), null)}
+        case REMOVE_USER_ROLE_SUCCESS:
+            return { ...state, userToRoles: changeRole(state, action.user, null, action.role.get('name'))}
         case CHANGE_GROUP_ROLE_SUCCESS:
-            return {...state, userToRoles: changeGroupRole(state, action.user, action.newRole.get('name'), action.oldRole.get('name'))}
+            return {...state, userToRoles: changeRole(state, action.user, action.newRole.get('name'), action.oldRole.get('name'))}
         case CLEAR_ROLES:
             return initialState.roles
         default:
@@ -16,17 +20,27 @@ export default function roleReducer(state = initialState.roles, action) {
     }
 }
 
-function changeGroupRole(state, targetUser, newGroupRole, oldGroupRole) {
+function changeRole(state, targetUser, newRole, oldRole) {
     const newMap = new Map()
     state.userToRoles.forEach((roles, userId) => {
         if(userId === targetUser.id) {
-            const newRoles = roles.filter(role => role !== oldGroupRole)
-            newRoles.push(newGroupRole)
-            newMap.set(userId, newRoles)
+            if (newRole && oldRole) {
+                const newRoles = roles.filter(role => role !== oldRole)
+                newRoles.push(newRole)
+                newMap.set(userId, newRoles)
+            }
+            else if (newRole) {
+                newMap.set(userId, [...roles, newRole])
+            }
+            else if (oldRole) {
+                const newRoles = roles.filter(role => role !== oldRole)
+                newMap.set(userId, newRoles)
+            }
         } else {
             newMap.set(userId, roles)
         }
     })
+    console.log('im here')
     return newMap
 
 }
