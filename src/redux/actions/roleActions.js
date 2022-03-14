@@ -84,7 +84,7 @@ export function changeGroupRole(user, newRole, oldRole) {
     }
 }
 
-export function changeRoles(user, rolesToAdd, rolesToRemove) {
+export function changeRoles(user, newGroupRole, rolesToAdd, rolesToRemove) {
     return function (dispatch) {
         rolesToAdd.map(roleToAdd => roleApi.addUser(roleToAdd, user)
         .then(() => {
@@ -102,6 +102,9 @@ export function changeRoles(user, rolesToAdd, rolesToRemove) {
             dispatch(apiCallError())
             throw error
         }))
+        if (newGroupRole) {
+            roleApi.changeGroupRole(newGroupRole, user)
+        }
         return
     }
 }

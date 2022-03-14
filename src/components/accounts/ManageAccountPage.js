@@ -183,12 +183,13 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         const newRoles = account.roles
         const rolesToAdd = allRoles.filter(r => newRoles.includes(r.getName())).filter(r => !oldRoles.includes(r.getName()))
         const rolesToRemove = allRoles.filter(r => oldRoles.includes(r.getName())).filter(r => !newRoles.includes(r.getName()))
+        const newGroupRole = roleMapper.getGroupRole(account.parseObject.get("roles")) === account.groupRole ? null : account.groupRole
         account.parseObject.set("roles", account.roles)
         account.parseObject.set('isApproved', true)
 
         actions.users.saveUser(account).then((updatedAccount) => {
             //TODO Review this logic, account for any error, make sure to clear user if this happens
-            actions.roles.changeRoles(updatedAccount, rolesToAdd, rolesToRemove)
+            actions.roles.changeRoles(updatedAccount, newGroupRole, rolesToAdd, rolesToRemove)
             toast.success("Account saved.")
             history.push("/accounts")
         }).catch(error => {
@@ -212,7 +213,6 @@ ManageAccountPage.propTypes = {
 function mapStateToProps(state, ownProps) {
     const slug = ownProps.match.params.slug
     const account = slug && state.users.length > 0 ? getUserById(state.users, slug) : createNewUser()
-    console.log(state)
     return {
         allRoles: state.roles.all,
         usersToRoles: state.roles.userToRoles,
