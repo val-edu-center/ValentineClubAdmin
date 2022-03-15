@@ -35,6 +35,7 @@ function App() {
                 <Route path="/login" component={LoginPage}></Route>
                 <Route path="/logout" component={LogoutPage}></Route>
                 <Route path="/accounts" component={AccountsPage}></Route>
+                <Route path="/account/:slug" component={ManageAccountPage}></Route>
                 <Route path="/account/" component={ManageAccountPage}></Route>
                 <Route path="/gamenights" component={GameNightPage}></Route>
                 <Route path="/gamenight/" component={ManageGameNightPage}></Route>

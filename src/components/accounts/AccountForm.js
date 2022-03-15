@@ -3,8 +3,9 @@ import PropTypes from "prop-types"
 import TextInput from '../common/TextInput';
 import RadioInput from '../common/RadioInput';
 import * as roleMapper from "../../utility/RoleMapper"
+import CheckboxInput from '../common/CheckboxInput';
 
-const AccountForm = ({account, onFirstChange, onLastChange, onSave, onRoleChange, onUsernameChange, onPasswordChange, saving = false, errors = {}}) => {
+const AccountForm = ({ account, allRoles, onFirstChange, onLastChange, onSave, onRoleChange, onUsernameChange, onRolesChange, onPasswordChange, saving = false, errors = {} }) => {
     const roles = roleMapper.getRoles(account.roles)
     const enableUserAndPass = !roles.isPrep && !roles.isCadet
     return (
@@ -19,9 +20,17 @@ const AccountForm = ({account, onFirstChange, onLastChange, onSave, onRoleChange
                 name="role"
                 label="Role"
                 value={account.groupRole}
-                options={roleMapper.roleGroups}
+                options={roleMapper.roleGroups.filter(r => allRoles.includes(r))}
                 onChange={onRoleChange}
                 error={errors.role}
+            />
+            <CheckboxInput
+                name="roles"
+                label="Other Roles"
+                options={allRoles.filter(r => !roleMapper.roleGroups.includes(r))}
+                values={account.roles}
+                onChange={onRolesChange}
+                error={errors.roles}
             />
             <TextInput
                 name="first"
@@ -44,7 +53,7 @@ const AccountForm = ({account, onFirstChange, onLastChange, onSave, onRoleChange
                 onChange={onUsernameChange}
                 error={errors.username}
             />}
-            {enableUserAndPass && <TextInput
+            {enableUserAndPass && !account.id && <TextInput
                 name="password"
                 label="Password"
                 value={account.password}
@@ -61,10 +70,12 @@ const AccountForm = ({account, onFirstChange, onLastChange, onSave, onRoleChange
 
 AccountForm.propTypes = {
     account: PropTypes.object.isRequired,
+    allRoles: PropTypes.array.isRequired,
     errors: PropTypes.object,
     onSave: PropTypes.func.isRequired,
     onRoleChange: PropTypes.func.isRequired,
     onUsernameChange: PropTypes.func.isRequired,
+    onRolesChange: PropTypes.func.isRequired,
     onFirstChange: PropTypes.func.isRequired,
     onLastChange: PropTypes.func.isRequired,
     onPasswordChange: PropTypes.func.isRequired,

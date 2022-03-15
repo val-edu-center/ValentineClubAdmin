@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from "prop-types"
 import * as roleMapper from "../../utility/RoleMapper"
+import { Link } from 'react-router-dom'
 
 const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountChange, onGroupRoleChange, onSubmitClick, session, users, bankAccounts }) => {
     const bankAccountMap = getBankAccountMap(bankAccounts)
@@ -24,7 +25,7 @@ const AccountList = ({ onDeleteClick, onIsApprovedChange, onCreateBankAccountCha
                     return (
                         <tr key={user.id}>
                             <td>
-                                <p>{user.username}</p>
+                                <Link to={"/account/" + user.id}>{user.username}</Link>
                             </td>
                             <td> {getTime(user.createdAt)} </td>
                             <td>{getGroupRoleInput(user, isAdmin, onGroupRoleChange)}</td>

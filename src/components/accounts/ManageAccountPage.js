@@ -22,15 +22,42 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         }
         if (allRoles.length === 0) {
             actions.roles.loadAllRoles()
-            .then(roles => roles.map(r => actions.roles.loadUsersForRole(r)))
-            .catch(error => {
-                alert("Loading roles failed " + error)
-            })
+                .then(roles => roles.map(r => actions.roles.loadUsersForRole(r)))
+                .catch(error => {
+                    alert("Loading roles failed " + error)
+                })
         }
 
         //useEffect with an empty array is equivalent to componentDidMount
         //Otherwise, would run everytime it renders
     }, [props.account])
+
+    function changeRoles(account, role, checked) {
+        const oldParseObject = account.parseObject
+        if (role === 'select-all') {
+            const newRoles = checked ? allRoles.map(r => r.getName()).filter(r => !roleMapper.roleGroups.includes(r)) : []
+            return {
+                ...account,
+                roles: account.groupRole ? [...newRoles, account.groupRole] : newRoles,
+                parseObject: oldParseObject
+            }
+
+        } else {
+            const newRoles = checked ? [...account.roles, role] : account.roles.filter(r => r !== role)
+            return {
+                ...account,
+                roles: account.groupRole ? [...newRoles, account.groupRole] : newRoles,
+                parseObject: oldParseObject
+            }
+        }
+    }
+
+    function handleRolesChange(event) {
+        const role = event.target.name
+        const newAccount = changeRoles(account, role, event.target.checked)
+        setAccount(newAccount)
+
+    }
 
     function changeUsername(account, username) {
         const parseObject = account.parseObject
@@ -136,7 +163,7 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
 
         if (!groupRole) errors.role = "Role is required"
         if (!username && enableUserAndPass) errors.username = "Username is required"
-        if (!password && enableUserAndPass) errors.password = "Password is required"
+        if (!password && enableUserAndPass && !account.id) errors.password = "Password is required"
         if (!first) errors.first = "First Name is required"
         if (!last) errors.last = "Last Name is required"
 
@@ -150,30 +177,25 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         if (!formIsValid()) return
         setSaving(true)
 
-        const oldGroupRoleName = roleMapper.getGroupRole(account.parseObject.get("roles"))
-        const newGroupRoleName = account.groupRole
+        const oldRoles = account.parseObject.get("roles") ? account.parseObject.get("roles") : []
+        const newRoles = account.roles
+        const rolesToAdd = allRoles.filter(r => newRoles.includes(r.getName())).filter(r => !oldRoles.includes(r.getName()))
+        const rolesToRemove = allRoles.filter(r => oldRoles.includes(r.getName())).filter(r => !newRoles.includes(r.getName()))
+        const newGroupRole = roleMapper.getGroupRole(account.parseObject.get("roles")) === account.groupRole ? null : account.groupRole
         account.parseObject.set("roles", account.roles)
         account.parseObject.set('isApproved', true)
 
         actions.users.saveUser(account).then((updatedAccount) => {
-            if (newGroupRoleName !== oldGroupRoleName) {
-                const newRole = allRoles.find(role => role.getName() === newGroupRoleName)
-                var oldRole = null
-                if (oldGroupRoleName !== null) {
-                    oldRole = allRoles.find(role => role.getName() === oldGroupRoleName)
-                }
-                actions.roles.changeGroupRole(updatedAccount, newRole, oldRole).then(() => {
-                    toast.success("Account saved.")
-                    history.push("/accounts")
-                })
-            }
+            //TODO Review this logic, account for any error, make sure to clear user if this happens
+            actions.roles.changeRoles(updatedAccount, newGroupRole, rolesToAdd, rolesToRemove)
+            toast.success("Account saved.")
+            history.push("/accounts")
         }).catch(error => {
             setSaving(false)
             setErrors({ onSave: error.message })
         })
     }
-
-    return <AccountForm account={account} onFirstChange={handleFirstChange} onLastChange={handleLastChange} onPasswordChange={handlePasswordChange} onRoleChange={handleRoleChange} onUsernameChange={handleUsernameChange} onSave={handleSave} errors={errors} saving={saving}></AccountForm>
+    return <AccountForm allRoles={allRoles.map(r => r.getName())} onRolesChange={handleRolesChange} account={account} onFirstChange={handleFirstChange} onLastChange={handleLastChange} onPasswordChange={handlePasswordChange} onRoleChange={handleRoleChange} onUsernameChange={handleUsernameChange} onSave={handleSave} errors={errors} saving={saving}></AccountForm>
 }
 
 ManageAccountPage.propTypes = {
