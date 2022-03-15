@@ -36,7 +36,6 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
         const oldParseObject = account.parseObject
         if (role === 'select-all') {
             const newRoles = checked ? allRoles.map(r => r.getName()).filter(r => !roleMapper.roleGroups.includes(r)) : []
-            oldParseObject.set("options", newRoles)
             return {
                 ...account,
                 roles: account.groupRole ? [...newRoles, account.groupRole] : newRoles,
@@ -45,7 +44,6 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
 
         } else {
             const newRoles = checked ? [...account.roles, role] : account.roles.filter(r => r !== role)
-            oldParseObject.set("options", newRoles)
             return {
                 ...account,
                 roles: account.groupRole ? [...newRoles, account.groupRole] : newRoles,
@@ -165,7 +163,7 @@ const ManageAccountPage = ({ accounts, actions, history, allRoles, ...props }) =
 
         if (!groupRole) errors.role = "Role is required"
         if (!username && enableUserAndPass) errors.username = "Username is required"
-        if (!password && enableUserAndPass) errors.password = "Password is required"
+        if (!password && enableUserAndPass && !account.id) errors.password = "Password is required"
         if (!first) errors.first = "First Name is required"
         if (!last) errors.last = "Last Name is required"
 

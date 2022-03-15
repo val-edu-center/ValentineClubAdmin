@@ -40,7 +40,6 @@ function changeRole(state, targetUser, newRole, oldRole) {
             newMap.set(userId, roles)
         }
     })
-    console.log('im here')
     return newMap
 
 }

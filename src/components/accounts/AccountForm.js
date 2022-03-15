@@ -5,7 +5,7 @@ import RadioInput from '../common/RadioInput';
 import * as roleMapper from "../../utility/RoleMapper"
 import CheckboxInput from '../common/CheckboxInput';
 
-const AccountForm = ({ account,allRoles, onFirstChange, onLastChange, onSave, onRoleChange, onUsernameChange, onRolesChange, onPasswordChange, saving = false, errors = {} }) => {
+const AccountForm = ({ account, allRoles, onFirstChange, onLastChange, onSave, onRoleChange, onUsernameChange, onRolesChange, onPasswordChange, saving = false, errors = {} }) => {
     const roles = roleMapper.getRoles(account.roles)
     const enableUserAndPass = !roles.isPrep && !roles.isCadet
     return (
@@ -53,7 +53,7 @@ const AccountForm = ({ account,allRoles, onFirstChange, onLastChange, onSave, on
                 onChange={onUsernameChange}
                 error={errors.username}
             />}
-            {enableUserAndPass && <TextInput
+            {enableUserAndPass && !account.id && <TextInput
                 name="password"
                 label="Password"
                 value={account.password}

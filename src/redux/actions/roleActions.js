@@ -85,6 +85,7 @@ export function changeGroupRole(user, newRole, oldRole) {
 }
 
 export function changeRoles(user, newGroupRole, rolesToAdd, rolesToRemove) {
+    console.log({rolesToAdd, rolesToRemove})
     return function (dispatch) {
         rolesToAdd.map(roleToAdd => roleApi.addUser(roleToAdd, user)
         .then(() => {
