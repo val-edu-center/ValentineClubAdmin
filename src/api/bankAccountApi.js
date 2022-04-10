@@ -1,35 +1,18 @@
-import { handleResponse, handleError, loadFromLocalStorage } from "./apiUtils";
+import { handleResponse, handleError, loadFromLocalStorage, getHeaders } from "./apiUtils";
 
 const baseUrl = process.env.BACK4APP_API_URL + "/classes/Accounts";
-const appId = process.env.BACK4APP_APP_ID;
-const restApiKey = process.env.BACK4APP_REST_API_KEY;
 
+//TODO Convert to use parse library
 export function getAllAccounts() {
-    const state = loadFromLocalStorage()
-    const sessionToken = state.session.sessionToken
-    return fetch(baseUrl, {
-        headers: {
-            "content-type": "application/json",
-            "X-Parse-Application-Id": appId,
-            "X-Parse-REST-API-Key": restApiKey,
-            "X-Parse-Session-Token": sessionToken
-        }
-    })
+    return fetch(baseUrl, {headers: getHeaders()})
         .then(handleResponse)
         .catch(handleError);
 }
 
 export function createBankAccount(username) {
-    const state = loadFromLocalStorage()
-    const sessionToken = state.session.sessionToken
     return fetch(baseUrl, {
         method: "POST",
-        headers: {
-            "content-type": "application/json",
-            "X-Parse-Application-Id": appId,
-            "X-Parse-REST-API-Key": restApiKey,
-            "X-Parse-Session-Token": sessionToken
-        },
+        headers: getHeaders(),
         body: JSON.stringify({username, balance: 0})
     })
         .then(handleResponse)

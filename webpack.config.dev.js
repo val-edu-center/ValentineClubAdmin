@@ -30,12 +30,10 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             "process.env":{
-                "MOCK_API_URL": JSON.stringify("http://localhost:3001"),
                 "BACK4APP_API_URL": JSON.stringify("http://localhost:3001"),
                 "BACK4APP_APP_ID": JSON.stringify("pen8j01Zc3JaqVkHmMCbZud1AhOaOMeBYTpzlUhw"),
                 "BACK4APP_REST_API_KEY": JSON.stringify("GWAMpyqKg5rhHbE9ueXXFdjD3vF3n980YzHRE8SG"),
-                "CLUB_DIRECTOR_USERNAME": JSON.stringify("ScPJhZhiYy"),
-                "PROGRAM_DIRECTOR_USERNAME": JSON.stringify("7vR9hH9JG9")
+                "MOCK_API": JSON.stringify(true)
             }
         }),
         new HtmlWebpackPlugin({
