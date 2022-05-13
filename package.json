@@ -2,9 +2,10 @@
   "name": "ps-redux",
   "description": "Valentine Club App",
   "scripts": {
-    "start": "run-p start:preprod",
+    "start": "run-p start:render",
     "start:dev": "webpack serve --config webpack.config.dev.js --port 3000  start:api",
-    "start:preprod": "webpack serve --config webpack.config.preprod.js --openssl-legacy-provider --port 3000",
+    "start:preprod": "webpack serve --config webpack.config.preprod.js --port 3000",
+    "start:render" : "export NODE_OPTIONS=--openssl-legacy-provider;webpack serve --config webpack.config.preprod.js --port 3000",
     "prestart:api": "node tools/createMockDb.js",
     "start:api": "node tools/apiServer.js"
   },
